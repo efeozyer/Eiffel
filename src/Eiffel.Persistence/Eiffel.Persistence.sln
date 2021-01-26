@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eiffel.Persistence.Abstractions", "src\Eiffel.Persistence.Abstractions\Eiffel.Persistence.Abstractions.csproj", "{FC0B9040-1D13-41A6-93C4-28AAD453AE6F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E0C68D55-5412-4F6D-BDB1-D4889300ED18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eiffel.Persistence.Core", "src\Eiffel.Persistence.Core\Eiffel.Persistence.Core.csproj", "{999CC291-BDC7-494A-90CF-1D372E227888}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eiffel.Persistence.MongoDB", "src\Eiffel.Persistence.MongoDB\Eiffel.Persistence.MongoDB.csproj", "{CD18BCCE-73F8-48F2-BCA9-D77FC113C167}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{2DEF0581-EB34-469F-AB74-624F7478BC30}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0DDC52B8-FCA5-46CC-B91A-FCB9217AA9A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eiffel.Persistence.Tests", "tests\Eiffel.Persistence.Tests\Eiffel.Persistence.Tests.csproj", "{E631A1C9-EEBF-4C56-9F94-E7BFE84D495F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FC0B9040-1D13-41A6-93C4-28AAD453AE6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC0B9040-1D13-41A6-93C4-28AAD453AE6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC0B9040-1D13-41A6-93C4-28AAD453AE6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC0B9040-1D13-41A6-93C4-28AAD453AE6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{999CC291-BDC7-494A-90CF-1D372E227888}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{999CC291-BDC7-494A-90CF-1D372E227888}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{999CC291-BDC7-494A-90CF-1D372E227888}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{999CC291-BDC7-494A-90CF-1D372E227888}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD18BCCE-73F8-48F2-BCA9-D77FC113C167}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD18BCCE-73F8-48F2-BCA9-D77FC113C167}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD18BCCE-73F8-48F2-BCA9-D77FC113C167}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD18BCCE-73F8-48F2-BCA9-D77FC113C167}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E631A1C9-EEBF-4C56-9F94-E7BFE84D495F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E631A1C9-EEBF-4C56-9F94-E7BFE84D495F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E631A1C9-EEBF-4C56-9F94-E7BFE84D495F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E631A1C9-EEBF-4C56-9F94-E7BFE84D495F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FC0B9040-1D13-41A6-93C4-28AAD453AE6F} = {E0C68D55-5412-4F6D-BDB1-D4889300ED18}
+		{999CC291-BDC7-494A-90CF-1D372E227888} = {E0C68D55-5412-4F6D-BDB1-D4889300ED18}
+		{CD18BCCE-73F8-48F2-BCA9-D77FC113C167} = {E0C68D55-5412-4F6D-BDB1-D4889300ED18}
+		{E631A1C9-EEBF-4C56-9F94-E7BFE84D495F} = {0DDC52B8-FCA5-46CC-B91A-FCB9217AA9A7}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6F0EA3B3-7216-411B-A9A3-623766658FC5}
+	EndGlobalSection
+EndGlobal
