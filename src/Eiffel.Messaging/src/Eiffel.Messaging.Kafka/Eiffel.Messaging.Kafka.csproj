@@ -1,7 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-  </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="BinaryPack" Version="1.0.1" />
+		<PackageReference Include="Confluent.Kafka" Version="1.5.3" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
+	</ItemGroup>
 
+	<ItemGroup>
+		<ProjectReference Include="..\Eiffel.Messaging.Abstractions\Eiffel.Messaging.Abstractions.csproj" />
+		<ProjectReference Include="..\Eiffel.Messaging.Core\Eiffel.Messaging.Core.csproj" />
+	</ItemGroup>
 </Project>
