@@ -1,2 +1,2 @@
 # Eiffel
-Evolvable Application Framework 
+Evolvable Modular Application Framework 
