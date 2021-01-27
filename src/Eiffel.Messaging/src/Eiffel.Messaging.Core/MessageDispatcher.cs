@@ -47,7 +47,7 @@ namespace Eiffel.Messaging.Core
 
             dynamic handler = _serviceProvider.GetService(handlerType);
             if (handler == null)
-                throw new HandlerCoultNotBeResolvedException($"{handlerType.Name} could not be resolved");
+                throw new HandlerCoultNotBeResolvedException($"{handlerType.AssemblyQualifiedName} could not be resolved");
 
             if (cancellationToken.IsCancellationRequested)
                 throw new OperationCanceledException();
@@ -59,22 +59,12 @@ namespace Eiffel.Messaging.Core
             where TReply : class
         {
             var handlerType = typeof(IQueryHandler<,>).MakeGenericType(query.GetType(), typeof(TReply));
-            var handler = _serviceProvider.GetService(handlerType);
+            var handler = _serviceProvider.GetService(handlerType) as dynamic;
             if (handler == null)
             {
-                throw new HandlerCoultNotBeResolvedException($"{handlerType.Name} could not be resolved");
+                throw new HandlerCoultNotBeResolvedException($"{handlerType.AssemblyQualifiedName} could not be resolved");
             }
-
-            MethodInfo method = handlerType.GetMethod("HandleAsync") ?? handlerType.GetMethod("Handle");
-            try
-            {
-                return (Task<TReply>)method.Invoke(handler, new object[] { query, cancellationToken });
-            }
-            catch (TargetInvocationException ex)
-            {
-                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-            }
-            throw new InvalidOperationException();
+            return handler.HandleAsync((dynamic)query, cancellationToken);
         }
 
         private Task PublishEventAsync<TEvent>(TEvent @event, CancellationToken cancellationToken) 
@@ -89,7 +79,7 @@ namespace Eiffel.Messaging.Core
                 if (cancellationToken.IsCancellationRequested) 
                     throw new OperationCanceledException();
 
-                tasks.Add(handler.HandleAsync(@event, cancellationToken));
+                tasks.Add(handler?.HandleAsync(@event, cancellationToken));
             }
             return Task.WhenAll(tasks);
         }

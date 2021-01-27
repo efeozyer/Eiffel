@@ -1,6 +1,6 @@
 ﻿using Confluent.Kafka;
 
-namespace Eiffel.Messaging.Providers.Kafka
+namespace Eiffel.Messaging.Kafka
 {
     public class KafkaClientConfig
     {

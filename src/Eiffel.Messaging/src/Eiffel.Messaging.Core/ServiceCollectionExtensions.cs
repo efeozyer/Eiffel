@@ -15,7 +15,7 @@ namespace Eiffel.Messaging.Core
             return services;
         }
 
-        private static IServiceCollection AddMessageHandlers(this IServiceCollection services)
+        public static IServiceCollection AddMessageHandlers(this IServiceCollection services)
         {
             services.RegisterType(typeof(ICommandHandler<>));
             services.RegisterType(typeof(IQueryHandler<,>));
