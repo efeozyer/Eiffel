@@ -1,11 +1,7 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-
-namespace Eiffel.Messaging.Abstractions.Event
+﻿namespace Eiffel.Messaging.Abstractions.Event
 {
-    public interface IEventHandler<in TEvent>
+    public interface IEventHandler<in TEvent> : IMessageHandler<TEvent>
         where TEvent : IEvent
     {
-        Task HandleAsync(TEvent @event, CancellationToken cancellationToken);
     }
 }

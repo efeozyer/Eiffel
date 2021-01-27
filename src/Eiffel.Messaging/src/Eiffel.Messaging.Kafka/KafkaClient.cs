@@ -41,10 +41,10 @@ namespace Eiffel.Messaging.Providers.Kafka
 
                     try
                     {
-                        var message = _consumer.Consume().Message;
-                        if (message?.Value?.Length > 0)
+                        var result = _consumer.Consume();
+                        if (result?.Message?.Value?.Length > 0)
                         {
-                            var msg = BinaryConverter.Deserialize<TMessage>(message.Value);
+                            var msg = BinaryConverter.Deserialize<TMessage>(result.Message.Value);
                             dispatcher.Invoke(msg);
                             _consumer.Commit();
                         }
@@ -69,10 +69,10 @@ namespace Eiffel.Messaging.Providers.Kafka
                         throw new ConsumeCancelledByUserException();
                     }
 
-                    var message = _consumer.Consume().Message;
-                    if (message?.Value?.Length > 0)
+                    var result = _consumer.Consume();
+                    if (result?.Message?.Value?.Length > 0)
                     {
-                        var msg = BinaryConverter.Deserialize<TMessage>(message.Value);
+                        var msg = BinaryConverter.Deserialize<TMessage>(result.Message.Value);
                         dispatcher.Invoke(msg);
                         _consumer.Commit();
                     }
