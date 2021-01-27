@@ -57,7 +57,7 @@ namespace Eiffel.Messaging.Kafka
             }, cancellationToken);
         }
 
-        public void Consume<TMessage>(string topicName, Action<TMessage> dispatcher)
+        public virtual void Consume<TMessage>(string topicName, Action<TMessage> dispatcher)
             where TMessage : IMessage, new()
         {
             _consumer.Subscribe(topicName);
@@ -99,16 +99,16 @@ namespace Eiffel.Messaging.Kafka
             });
         }
 
-        public virtual void Dispose()
-        {
-            _producer?.Dispose();
-            _consumer?.Dispose();
-        }
-
         public virtual void Unsubscribe()
         {
             _tokenSource.Cancel();
             _consumer.Unsubscribe();
+        }
+
+        public virtual void Dispose()
+        {
+            _producer?.Dispose();
+            _consumer?.Dispose();
         }
     }
 }

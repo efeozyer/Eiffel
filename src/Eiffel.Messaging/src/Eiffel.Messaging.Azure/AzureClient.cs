@@ -23,7 +23,7 @@ namespace Eiffel.Messaging.Azure
             _tokenSource = new CancellationTokenSource();
         }
 
-        public void Consume<TMessage>(string topicName, Action<TMessage> dispatcher) where TMessage : IMessage, new()
+        public virtual void Consume<TMessage>(string topicName, Action<TMessage> dispatcher) where TMessage : IMessage, new()
         {
             var receiver = _client.CreateProcessor(_config.QueueName, topicName);
 
@@ -47,7 +47,7 @@ namespace Eiffel.Messaging.Azure
             receiver.StartProcessingAsync().GetAwaiter().GetResult();
         }
 
-        public async Task ConsumeAsync<TMessage>(string topicName, Action<TMessage> dispatcher, CancellationToken cancellationToken) where TMessage : IMessage, new()
+        public virtual async Task ConsumeAsync<TMessage>(string topicName, Action<TMessage> dispatcher, CancellationToken cancellationToken) where TMessage : IMessage, new()
         {
             var receiver = _client.CreateProcessor(_config.QueueName, topicName);
             receiver.ProcessMessageAsync += async (args) =>
@@ -68,7 +68,7 @@ namespace Eiffel.Messaging.Azure
             await receiver.StartProcessingAsync(cancellationToken);
         }
 
-        public void Produce<TMessage>(string topicName, TMessage message) where TMessage : IMessage, new()
+        public virtual void Produce<TMessage>(string topicName, TMessage message) where TMessage : IMessage, new()
         {
             var sender = _client.CreateSender(topicName);
             sender.SendMessageAsync(new ServiceBusMessage(BinaryConverter.Serialize(message))).GetAwaiter().GetResult();
@@ -82,12 +82,12 @@ namespace Eiffel.Messaging.Azure
             await sender.DisposeAsync();
         }
 
-        public void Unsubscribe()
+        public virtual void Unsubscribe()
         {
             _tokenSource.Cancel();
         }
-        
-        public void Dispose()
+
+        public virtual void Dispose()
         {
             _client?.DisposeAsync().GetAwaiter().GetResult();
         }

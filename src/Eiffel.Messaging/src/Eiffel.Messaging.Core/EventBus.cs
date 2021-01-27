@@ -17,19 +17,19 @@ namespace Eiffel.Messaging.Core
             _dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
         }
 
-        public void Publish<TEvent>(TEvent @event)
+        public virtual void Publish<TEvent>(TEvent @event)
             where TEvent : IEvent, new()
         {
             _client.Produce(typeof(TEvent).GetTopic(), @event);
         }
 
-        public Task PublishAsync<TEvent>(TEvent @event, CancellationToken cancellationToken) 
+        public virtual Task PublishAsync<TEvent>(TEvent @event, CancellationToken cancellationToken) 
             where TEvent : IEvent, new()
         {
             return _client.ProduceAsync(typeof(TEvent).GetTopic(), @event, cancellationToken);
         }
 
-        public void Subscribe<TEvent>()
+        public virtual void Subscribe<TEvent>()
             where TEvent : IEvent, new()
         {
             _client.Consume<TEvent>(typeof(TEvent).GetTopic(), async (@event) =>
@@ -38,7 +38,7 @@ namespace Eiffel.Messaging.Core
             });
         }
 
-        public Task SubscribeAsync<TEvent>(CancellationToken cancellationToken)
+        public virtual Task SubscribeAsync<TEvent>(CancellationToken cancellationToken)
             where TEvent : IEvent, new()
         {
             return _client.ConsumeAsync<TEvent>(typeof(TEvent).GetTopic(), async (@event) =>
@@ -47,7 +47,7 @@ namespace Eiffel.Messaging.Core
             }, cancellationToken);
         }
 
-        public void Unsubscribe()
+        public virtual void Unsubscribe()
         {
             _client.Unsubscribe();
         }

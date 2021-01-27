@@ -16,7 +16,7 @@ namespace Eiffel.Messaging.InMemory
              _subscriptions = new Dictionary<string, Subject<dynamic>>();
         }
 
-        public void Consume<TMessage>(string topicName, Action<TMessage> dispatcher) where TMessage : IMessage, new()
+        public virtual void Consume<TMessage>(string topicName, Action<TMessage> dispatcher) where TMessage : IMessage, new()
         {
             CreateSubscription(topicName);
             _subscriptions[topicName].Subscribe((message) =>
@@ -25,7 +25,7 @@ namespace Eiffel.Messaging.InMemory
             });
         }
 
-        public Task ConsumeAsync<TMessage>(string topicName, Action<TMessage> dispatcher, CancellationToken cancellationToken) where TMessage : IMessage, new()
+        public virtual Task ConsumeAsync<TMessage>(string topicName, Action<TMessage> dispatcher, CancellationToken cancellationToken) where TMessage : IMessage, new()
         {
             CreateSubscription(topicName);
             _subscriptions[topicName].Subscribe((message) =>
@@ -35,20 +35,20 @@ namespace Eiffel.Messaging.InMemory
             return Task.CompletedTask;
         }
 
-        public void Produce<TMessage>(string topicName, TMessage message) where TMessage : IMessage, new()
+        public virtual void Produce<TMessage>(string topicName, TMessage message) where TMessage : IMessage, new()
         {
             CreateSubscription(topicName);
             _subscriptions[topicName].OnNext(message);
         }
 
-        public Task ProduceAsync<TMessage>(string topicName, TMessage message, CancellationToken cancellationToken) where TMessage : IMessage, new()
+        public virtual Task ProduceAsync<TMessage>(string topicName, TMessage message, CancellationToken cancellationToken) where TMessage : IMessage, new()
         {
             CreateSubscription(topicName);
              _subscriptions[topicName].OnNext(message);
             return Task.CompletedTask;
         }
 
-        public void Unsubscribe()
+        public virtual void Unsubscribe()
         {
             foreach(var subscription in _subscriptions)
             {
@@ -57,7 +57,7 @@ namespace Eiffel.Messaging.InMemory
             _subscriptions.Clear();
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             Unsubscribe();
         }
