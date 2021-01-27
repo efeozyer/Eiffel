@@ -18,14 +18,13 @@ namespace Eiffel.Messaging.Tests
         public MessageDispatcher_ServiceCollection_Tests()
         {
             _services = new ServiceCollection();
-            _services.AddMessageDispatcher();
-            _services.AddMessageHandlers();
         }
 
         [Fact]
         public void Should_Register_Handlers()
         {
             // Arrange
+            _services.AddMessageHandlers();
             var serviceProvider = _services.BuildServiceProvider();
 
             // Act
@@ -44,6 +43,7 @@ namespace Eiffel.Messaging.Tests
         public void Should_Register_Message_Dispatcher()
         {
             // Arrange
+            _services.AddMessageDispatcher();
             var serviceProvider = _services.BuildServiceProvider();
 
             // Act

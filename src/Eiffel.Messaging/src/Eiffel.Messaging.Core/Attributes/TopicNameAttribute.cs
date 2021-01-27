@@ -15,16 +15,14 @@ namespace Eiffel.Messaging.Core.Attributes
 
     public static class TopicNameExtensions
     {
-        public static string GetTopicName(this object obj)
-        {
-            var attribute = obj.GetType().CustomAttributes.Single(x => x.AttributeType == typeof(TopicNameAttribute));
-            var topicName = attribute.ConstructorArguments[0].Value as string;
-            return topicName;
-        }
-
         public static string GetTopic(this Type type)
         {
-            var attribute = type.CustomAttributes.Single(x => x.AttributeType == typeof(TopicNameAttribute));
+            var attribute = type.CustomAttributes.SingleOrDefault(x => x.AttributeType == typeof(TopicNameAttribute));
+            if (attribute == null)
+            {
+                throw new ArgumentNullException($"TopicName attribute must be specified on {type.AssemblyQualifiedName}");
+            }
+
             var topicName = attribute.ConstructorArguments[0].Value as string;
             return topicName;
         }
