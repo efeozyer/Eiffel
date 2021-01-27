@@ -7,7 +7,7 @@ using Eiffel.Messaging.Abstractions;
 using Eiffel.Messaging.Core.Exceptions;
 using Microsoft.Extensions.Logging;
 
-namespace Eiffel.Messaging.Providers.Kafka
+namespace Eiffel.Messaging.Kafka
 {
     public class KafkaClient : IMessageQueueClient
     {
