@@ -11,7 +11,7 @@ namespace Eiffel.Messaging.Core
     {
         public static IServiceCollection AddMessageDispatcher(this IServiceCollection services)
         {
-            services.AddSingleton<IMessageDispatcher, MessageDispatcher>();
+            services.AddSingleton<IMediator, Mediator>();
             return services;
         }
 
@@ -20,6 +20,12 @@ namespace Eiffel.Messaging.Core
             services.RegisterType(typeof(ICommandHandler<>));
             services.RegisterType(typeof(IQueryHandler<,>));
             services.RegisterType(typeof(IEventHandler<>));
+            return services;
+        }
+
+        public static IServiceCollection AddMessagingMiddlewares(this IServiceCollection services)
+        {
+            services.RegisterType(typeof(IMessagingMiddleware));
             return services;
         }
 

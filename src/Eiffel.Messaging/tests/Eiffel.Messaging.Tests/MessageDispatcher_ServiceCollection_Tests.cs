@@ -40,6 +40,21 @@ namespace Eiffel.Messaging.Tests
         }
 
         [Fact]
+        public void Should_Register_Middlewares()
+        {
+            // Arrange
+            _services.AddMessagingMiddlewares();
+            var serviceProvider = _services.BuildServiceProvider();
+
+            // Act
+            var middlewares = serviceProvider.GetServices<IMessagingMiddleware>();
+
+            // Assert
+            middlewares.Should().NotBeNullOrEmpty();
+            middlewares.Count().Should().Be(2);
+        }
+
+        [Fact]
         public void Should_Register_Message_Dispatcher()
         {
             // Arrange
@@ -47,7 +62,7 @@ namespace Eiffel.Messaging.Tests
             var serviceProvider = _services.BuildServiceProvider();
 
             // Act
-            var service = serviceProvider.GetService<IMessageDispatcher>();
+            var service = serviceProvider.GetService<IMediator>();
 
             // Assert
             service.Should().NotBeNull();

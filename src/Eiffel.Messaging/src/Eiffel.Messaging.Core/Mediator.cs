@@ -1,25 +1,25 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Eiffel.Messaging.Abstractions;
+﻿using Eiffel.Messaging.Abstractions;
+using Eiffel.Messaging.Abstractions.Command;
 using Eiffel.Messaging.Abstractions.Event;
 using Eiffel.Messaging.Abstractions.Query;
-using Eiffel.Messaging.Abstractions.Command;
-using Microsoft.Extensions.DependencyInjection;
 using Eiffel.Messaging.Core.Exceptions;
-using System.Reflection;
-using System.Runtime.ExceptionServices;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Eiffel.Messaging.Core
 {
-    public class MessageDispatcher : IMessageDispatcher
+    public class Mediator : IMediator
     {
         private readonly IServiceProvider _serviceProvider;
+        private readonly MessagingMiddleware _messagingMiddleware;
 
-        public MessageDispatcher(IServiceProvider serviceProvider)
+        public Mediator(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+            _messagingMiddleware = new MessagingMiddleware(serviceProvider);
         }
 
         public virtual Task DispatchAsync<TCommand>(TCommand command, CancellationToken cancellationToken = default)
@@ -34,25 +34,25 @@ namespace Eiffel.Messaging.Core
             return DispatchMessageAsync(query, cancellationToken);
         }
 
-        public virtual Task PublishAsync<TEvent>(TEvent @event, CancellationToken cancellationToken = default) 
+        public virtual Task PublishAsync<TEvent>(TEvent @event, CancellationToken cancellationToken = default)
             where TEvent : IEvent
         {
             return PublishEventAsync(@event, cancellationToken);
         }
 
-        private Task DispatchMessageAsync<TCommand>(TCommand command, CancellationToken cancellationToken) 
+        private Task DispatchMessageAsync<TCommand>(TCommand command, CancellationToken cancellationToken)
             where TCommand : ICommand
         {
             var handlerType = typeof(ICommandHandler<TCommand>);
 
-            dynamic handler = _serviceProvider.GetService(handlerType);
+            var handler = (ICommandHandler<TCommand>)_serviceProvider.GetService(handlerType);
             if (handler == null)
                 throw new HandlerCoultNotBeResolvedException($"{handlerType.AssemblyQualifiedName} could not be resolved");
 
             if (cancellationToken.IsCancellationRequested)
                 throw new OperationCanceledException();
 
-            return handler.HandleAsync((dynamic)command, cancellationToken);
+            return _messagingMiddleware.Handle(handler, command, cancellationToken);
         }
 
         private Task<TReply> DispatchMessageAsync<TReply>(IQuery<TReply> query, CancellationToken cancellationToken)
@@ -64,10 +64,10 @@ namespace Eiffel.Messaging.Core
             {
                 throw new HandlerCoultNotBeResolvedException($"{handlerType.AssemblyQualifiedName} could not be resolved");
             }
-            return handler.HandleAsync((dynamic)query, cancellationToken);
+            return _messagingMiddleware.Handle(handler, query, cancellationToken);
         }
 
-        private Task PublishEventAsync<TEvent>(TEvent @event, CancellationToken cancellationToken) 
+        private Task PublishEventAsync<TEvent>(TEvent @event, CancellationToken cancellationToken)
             where TEvent : IEvent
         {
             var handlerType = typeof(IEventHandler<TEvent>);
@@ -76,7 +76,7 @@ namespace Eiffel.Messaging.Core
             var tasks = new List<Task>();
             foreach (var handler in handlers)
             {
-                if (cancellationToken.IsCancellationRequested) 
+                if (cancellationToken.IsCancellationRequested)
                     throw new OperationCanceledException();
 
                 tasks.Add(handler?.HandleAsync(@event, cancellationToken));

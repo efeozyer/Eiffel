@@ -39,7 +39,7 @@ namespace Eiffel.Messaging.Tests
             _services.AddSingleton(typeof(IEventHandler<MockEvent>), handlerMock2.Object);
 
             // Act
-            await dispatcher.PublishAsync(mockEvent, default);
+            await mediator.PublishAsync(mockEvent, default);
 
             // Assert
             handlerMock1.Verify(x => x.HandleAsync(It.IsAny<MockEvent>(), It.IsAny<CancellationToken>()), Times.Once);
@@ -53,7 +53,7 @@ namespace Eiffel.Messaging.Tests
             var command = new MockUnknownCommand();
 
             // Act
-            Task task() => dispatcher.DispatchAsync(command);
+            Task task() => mediator.DispatchAsync(command);
 
             // Assert
             await Assert.ThrowsAsync<HandlerCoultNotBeResolvedException>(task);
@@ -63,7 +63,7 @@ namespace Eiffel.Messaging.Tests
         public async Task Should_Dispatch_Query_To_Handler()
         {
             // Arrange
-            var mockQuery = new MockQuery();
+            var mockQuery = new MockQuery(0, 5);
 
             var handlerMock = new Mock<MockQueryHandler>();
             handlerMock.Setup(x => x.HandleAsync(It.IsAny<MockQuery>(), It.IsAny<CancellationToken>()));
@@ -71,7 +71,7 @@ namespace Eiffel.Messaging.Tests
             _services.AddSingleton(typeof(IQueryHandler<MockQuery, MockQueryResult>), handlerMock.Object);
 
             // Act
-            await dispatcher.DispatchAsync(mockQuery, default);
+            await mediator.DispatchAsync(mockQuery, default);
 
             // Assert
             handlerMock.Verify(x => x.HandleAsync(It.IsAny<MockQuery>(), It.IsAny<CancellationToken>()), Times.Once);
@@ -84,13 +84,13 @@ namespace Eiffel.Messaging.Tests
             var query = new MockUnknownQuery();
 
             // Act
-            Task task() => dispatcher.DispatchAsync(query);
+            Task task() => mediator.DispatchAsync(query);
 
             // Assert
             await Assert.ThrowsAsync<HandlerCoultNotBeResolvedException>(task);
         }
 
-        private IMessageDispatcher dispatcher =>
-            _services.BuildServiceProvider().GetRequiredService<IMessageDispatcher>();
+        private IMediator mediator =>
+            _services.BuildServiceProvider().GetRequiredService<IMediator>();
     }
 }

@@ -9,12 +9,12 @@ namespace Eiffel.Messaging.Core
     public class EventBus : IEventBus
     {
         private readonly IMessageQueueClient _client;
-        private readonly IMessageDispatcher _dispatcher;
+        private readonly IMediator _mediator;
 
-        public EventBus(IMessageQueueClient client, IMessageDispatcher dispatcher)
+        public EventBus(IMessageQueueClient client, IMediator mediator)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
-            _dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
         public virtual void Publish<TEvent>(TEvent @event)
@@ -34,7 +34,7 @@ namespace Eiffel.Messaging.Core
         {
             _client.Consume<TEvent>(typeof(TEvent).GetTopic(), async (@event) =>
             {
-                await _dispatcher.PublishAsync(@event);
+                await _mediator.PublishAsync(@event);
             });
         }
 
@@ -43,7 +43,7 @@ namespace Eiffel.Messaging.Core
         {
             return _client.ConsumeAsync<TEvent>(typeof(TEvent).GetTopic(), async (@event) =>
             {
-                await _dispatcher.PublishAsync(@event, cancellationToken);
+                await _mediator.PublishAsync(@event, cancellationToken);
             }, cancellationToken);
         }
 

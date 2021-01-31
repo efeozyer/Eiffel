@@ -5,10 +5,19 @@ using System.Threading.Tasks;
 
 namespace Eiffel.Messaging.Tests.Mocks.Handlers
 {
-    public class MockCommandHandler : ICommandHandler<MockCommand>
+    public class MockCommandHandler : ICommandHandler<MockCommand>, ICommandHandler<MockInvalidCommand>
     {
-        public Task HandleAsync(MockCommand message, CancellationToken cancellationToken)
+        public virtual Task HandleAsync(MockCommand message, CancellationToken cancellationToken)
         {
+            return Task.CompletedTask;
+        }
+
+        public virtual Task HandleAsync(MockInvalidCommand command, CancellationToken cancellationToken)
+        {
+            if (command is IValidatable cmd)
+            {
+                cmd.Validate();
+            }
             return Task.CompletedTask;
         }
     }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Eiffel.Messaging.Abstractions
 {
-    public interface IMessageDispatcher
+    public interface IMediator
     {
         Task<TReply> DispatchAsync<TReply>(IQuery<TReply> query, CancellationToken cancellationToken = default)
             where TReply : class;
