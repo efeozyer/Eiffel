@@ -58,7 +58,7 @@ namespace Eiffel.Messaging.Tests
         public void Should_Register_Message_Dispatcher()
         {
             // Arrange
-            _services.AddMessageDispatcher();
+            _services.AddMediator();
             var serviceProvider = _services.BuildServiceProvider();
 
             // Act

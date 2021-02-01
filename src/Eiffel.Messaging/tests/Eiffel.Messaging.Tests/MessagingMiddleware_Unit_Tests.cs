@@ -23,7 +23,7 @@ namespace Eiffel.Messaging.Tests
         {
             _services = new ServiceCollection();
             _services.AddMessageHandlers();
-            _services.AddMessageDispatcher();
+            _services.AddMediator();
         }
 
         /// <summary>

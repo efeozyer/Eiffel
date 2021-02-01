@@ -8,14 +8,14 @@ using BinaryPack;
 
 namespace Eiffel.Messaging.Azure
 {
-    public class AzureClient : IMessageQueueClient
+    public class AzureServiceBusClient : IMessageQueueClient
     {
         private readonly ServiceBusClient _client;
-        private readonly ILogger<AzureClient> _logger;
+        private readonly ILogger<AzureServiceBusClient> _logger;
         private readonly AzureClientConfig _config;
         private readonly CancellationTokenSource _tokenSource;
 
-        public AzureClient(ILogger<AzureClient> logger, AzureClientConfig config)
+        public AzureServiceBusClient(ILogger<AzureServiceBusClient> logger, AzureClientConfig config)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _config = config ?? throw new ArgumentNullException(nameof(config));

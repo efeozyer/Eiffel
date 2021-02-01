@@ -15,10 +15,11 @@ namespace Eiffel.Messaging.Kafka
         private readonly IProducer<Null, byte[]> _producer;
         private readonly IConsumer<Null, byte[]> _consumer;
         private readonly CancellationTokenSource _tokenSource;
+        private readonly KafkaClientConfig _config;
 
         public KafkaClient(ILogger<KafkaClient> logger, KafkaClientConfig config)
         {
-            _ = config ?? throw new ArgumentNullException(nameof(config));
+            _config = config ?? throw new ArgumentNullException(nameof(config));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             _producer = new ProducerBuilder<Null, byte[]>(config.ProducerConfig).Build();
@@ -46,8 +47,8 @@ namespace Eiffel.Messaging.Kafka
                         {
                             var msg = BinaryConverter.Deserialize<TMessage>(result.Message.Value);
                             dispatcher.Invoke(msg);
-                            _consumer.Commit();
                         }
+                        _consumer.Commit(result);
                     }
                     catch(Exception ex)
                     {

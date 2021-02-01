@@ -4,14 +4,17 @@ using Eiffel.Messaging.Abstractions.Event;
 using Eiffel.Messaging.Abstractions.Query;
 using Eiffel.Messaging.Abstractions.Command;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 
 namespace Eiffel.Messaging.Core
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddMessageDispatcher(this IServiceCollection services)
+        public static IServiceCollection AddMediator(this IServiceCollection services)
         {
             services.AddSingleton<IMediator, Mediator>();
+            services.AddMessageHandlers();
+            services.AddMessagingMiddlewares();
             return services;
         }
 
@@ -31,6 +34,18 @@ namespace Eiffel.Messaging.Core
 
         public static IServiceCollection AddMessageBus(this IServiceCollection services)
         {
+            return services;
+        }
+
+        public static IServiceCollection AddEventBus<TClient, TConfig>(this IServiceCollection services, IConfiguration config)
+            where TClient : class, IMessageQueueClient
+            where TConfig : class, IMessageClientConfig
+        {
+            var clientConfig = Activator.CreateInstance<TConfig>();
+            clientConfig.Bind(config);
+            services.AddSingleton(clientConfig);
+            services.AddSingleton<IMessageQueueClient, TClient>();
+            services.AddSingleton<IEventBus, EventBus>();
             return services;
         }
 
