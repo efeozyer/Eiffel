@@ -48,7 +48,11 @@ namespace Eiffel.Messaging.Kafka
                             var msg = BinaryConverter.Deserialize<TMessage>(result.Message.Value);
                             dispatcher.Invoke(msg);
                         }
-                        _consumer.Commit(result);
+
+                        if (!(_config.ConsumerConfig.EnableAutoCommit ?? false))
+                        {
+                            _consumer.Commit(result);
+                        }
                     }
                     catch(Exception ex)
                     {
