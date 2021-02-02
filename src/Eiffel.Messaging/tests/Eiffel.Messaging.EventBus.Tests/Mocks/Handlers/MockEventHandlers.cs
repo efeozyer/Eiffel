@@ -1,9 +1,9 @@
 ﻿using Eiffel.Messaging.Abstractions.Event;
-using Eiffel.Messaging.Tests.Mocks.Messages;
+using Eiffel.Messaging.EventBus.Tests.Mocks.Events;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Eiffel.Messaging.Tests.Mocks.Handlers
+namespace Eiffel.Messaging.EventBus.Tests.Mocks.Handlers
 {
     public class MockEventHandler1 : IEventHandler<MockEvent>
     {

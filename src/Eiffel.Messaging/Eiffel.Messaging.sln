@@ -23,9 +23,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eiffel.Messaging.Tests", "t
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eiffel.Messaging.InMemory.Tests", "tests\Eiffel.Messaging.InMemory.Tests\Eiffel.Messaging.InMemory.Tests.csproj", "{4A613ED5-F061-4216-80BB-A9C50A6B99BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eiffel.Samples.Messaging.Kafka", "samples\Eiffel.Samples.Messaging.Kafka\Eiffel.Samples.Messaging.Kafka.csproj", "{CB758759-7A0B-4650-8B06-0F11C6AA5964}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eiffel.Samples.Messaging.Kafka", "samples\Eiffel.Samples.Messaging.Kafka\Eiffel.Samples.Messaging.Kafka.csproj", "{CB758759-7A0B-4650-8B06-0F11C6AA5964}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eiffel.Samples.Contracts", "samples\Eiffel.Samples.Contracts\Eiffel.Samples.Contracts.csproj", "{24569279-DBB9-47EF-BCEC-DB6BFAD7842C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eiffel.Samples.Contracts", "samples\Eiffel.Samples.Contracts\Eiffel.Samples.Contracts.csproj", "{24569279-DBB9-47EF-BCEC-DB6BFAD7842C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eiffel.Messaging.EventBus.Tests", "tests\Eiffel.Messaging.EventBus.Tests\Eiffel.Messaging.EventBus.Tests.csproj", "{89FEF383-AB00-4C84-ADF4-5CB00579B444}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{24569279-DBB9-47EF-BCEC-DB6BFAD7842C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24569279-DBB9-47EF-BCEC-DB6BFAD7842C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24569279-DBB9-47EF-BCEC-DB6BFAD7842C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89FEF383-AB00-4C84-ADF4-5CB00579B444}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89FEF383-AB00-4C84-ADF4-5CB00579B444}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89FEF383-AB00-4C84-ADF4-5CB00579B444}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89FEF383-AB00-4C84-ADF4-5CB00579B444}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +89,7 @@ Global
 		{4A613ED5-F061-4216-80BB-A9C50A6B99BC} = {45BDFDEA-F226-45FA-A335-0945090247B7}
 		{CB758759-7A0B-4650-8B06-0F11C6AA5964} = {DF86BB79-CC7D-4C64-BE79-3B0008044F2F}
 		{24569279-DBB9-47EF-BCEC-DB6BFAD7842C} = {DF86BB79-CC7D-4C64-BE79-3B0008044F2F}
+		{89FEF383-AB00-4C84-ADF4-5CB00579B444} = {45BDFDEA-F226-45FA-A335-0945090247B7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0594AFC2-B010-45F3-91C1-BCB3E422A842}

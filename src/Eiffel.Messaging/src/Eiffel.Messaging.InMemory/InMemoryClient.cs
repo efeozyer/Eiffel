@@ -10,10 +10,12 @@ namespace Eiffel.Messaging.InMemory
     public class InMemoryClient : IMessageQueueClient
     {
         private readonly Dictionary<string, Subject<dynamic>> _subscriptions;
+        private readonly InMemoryClientConfig _config;
 
-        public InMemoryClient()
+        public InMemoryClient(InMemoryClientConfig config)
         {
              _subscriptions = new Dictionary<string, Subject<dynamic>>();
+            _config = config ?? throw new ArgumentNullException(nameof(config));
         }
 
         public virtual void Consume<TMessage>(string topicName, Action<TMessage> dispatcher) where TMessage : IMessage, new()

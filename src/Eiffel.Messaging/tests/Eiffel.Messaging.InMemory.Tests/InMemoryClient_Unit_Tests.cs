@@ -11,7 +11,7 @@ namespace Eiffel.Messaging.InMemory.Tests
 
         public InMemoryClient_Unit_Tests()
         {
-            _client = new InMemoryClient();
+            _client = new InMemoryClient(new InMemoryClientConfig());
         }
 
         [Fact]

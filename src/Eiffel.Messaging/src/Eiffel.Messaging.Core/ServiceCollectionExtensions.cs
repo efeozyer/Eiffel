@@ -49,6 +49,14 @@ namespace Eiffel.Messaging.Core
             return services;
         }
 
+        public static IServiceCollection AddEventBus<TClient>(this IServiceCollection services, TClient client)
+            where TClient : class, IMessageQueueClient
+        {
+            services.AddSingleton<IMessageQueueClient>(client);
+            services.AddSingleton<IEventBus, EventBus>();
+            return services;
+        }
+
         private static void RegisterType(this IServiceCollection services, Type targetType)
         {
             services.Scan(x => x.FromApplicationDependencies()

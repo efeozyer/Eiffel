@@ -24,6 +24,10 @@ namespace Eiffel.Messaging.Core.Attributes
             }
 
             var topicName = attribute.ConstructorArguments[0].Value as string;
+            if (string.IsNullOrWhiteSpace(topicName))
+            {
+                throw new ArgumentNullException($"{attribute.ConstructorArguments[0].GetType().Name} must be specified");
+            }
             return topicName;
         }
     }
