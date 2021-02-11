@@ -15,7 +15,7 @@ namespace Eiffel.Messaging.Core
             _middlewares = middlewares ?? throw new ArgumentNullException(nameof(middlewares));
         }
 
-        public Task<TReply> Handle<TReply>(dynamic handler, object message, CancellationToken cancellationToken)
+        public Task<TReply> Handle<TReply>(dynamic handler, IQuery<TReply> message, CancellationToken cancellationToken)
         {
             _middlewares
                 .ForEach(async x => await HandleException(x.InvokeAsync(message, cancellationToken)));
