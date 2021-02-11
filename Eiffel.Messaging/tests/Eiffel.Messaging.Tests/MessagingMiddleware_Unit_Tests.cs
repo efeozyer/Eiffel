@@ -29,10 +29,12 @@ namespace Eiffel.Messaging.Tests
             _validationMiddleware = new Mock<ValidationMiddleware>() { CallBase = true };
             _validationMiddleware.Setup(x => x.InvokeAsync(It.IsAny<MockQuery>(), It.IsAny<CancellationToken>()));
 
-            _services.AddMediator(options =>
+            _services.AddSingleton<IMediator, Mediator>(serviceProvider =>
             {
+                var options = new MiddlewareOptions();
                 options.Add(typeof(IMessagingMiddleware), _loggingMiddleware.Object);
                 options.Add(typeof(IMessagingMiddleware), _validationMiddleware.Object);
+                return new Mediator(serviceProvider, options);
             });
         }
 
@@ -55,19 +57,15 @@ namespace Eiffel.Messaging.Tests
             _services.AddSingleton(typeof(ICommandHandler<MockCommand>), mockCommandHandler.Object);
 
             // Act
-            var result = await mediator.DispatchAsync(mockQuery, default);
+            var result = await mediator.DispatchAsync<MockQueryResult>(mockQuery, default);
             await mediator.DispatchAsync(mockCommand, default);
 
             // Assert
             mockQueryHandler.Verify(x => x.HandleAsync(It.IsAny<MockQuery>(), It.IsAny<CancellationToken>()), Times.Once);
             mockCommandHandler.Verify(x => x.HandleAsync(It.IsAny<MockCommand>(), It.IsAny<CancellationToken>()), Times.Once);
 
-            _loggingMiddleware.Verify(x => x.InvokeAsync(It.IsAny<MockQuery>(), It.IsAny<CancellationToken>()), Times.Once);
-            _loggingMiddleware.Verify(x => x.InvokeAsync(It.IsAny<MockCommand>(), It.IsAny<CancellationToken>()), Times.Once);
-
-            _validationMiddleware.Verify(x => x.InvokeAsync(It.IsAny<MockQuery>(), It.IsAny<CancellationToken>()), Times.Once);
-            _validationMiddleware.Verify(x => x.InvokeAsync(It.IsAny<MockCommand>(), It.IsAny<CancellationToken>()), Times.Once);
-
+            _loggingMiddleware.Verify(x => x.InvokeAsync(It.IsAny<object>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
+            _validationMiddleware.Verify(x => x.InvokeAsync(It.IsAny<object>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
             result.Items.Count.Should().Be(3);
         }
 

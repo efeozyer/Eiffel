@@ -15,6 +15,11 @@ namespace Eiffel.Messaging.Tests.Mocks.Messages
         private readonly int _take;
         private readonly int _count;
 
+        public MockQuery()
+        {
+
+        }
+
         public MockQuery(int skip, int take, int count = 10)
         {
             _skip = skip;
@@ -48,6 +53,10 @@ namespace Eiffel.Messaging.Tests.Mocks.Messages
 
     public class MockInvalidQuery : IQuery<object>, IValidatable
     {
+        public MockInvalidQuery()
+        {
+
+        }
         public void Validate()
         {
             throw new ValidationException();

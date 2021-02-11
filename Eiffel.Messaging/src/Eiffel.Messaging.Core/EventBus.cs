@@ -18,19 +18,19 @@ namespace Eiffel.Messaging.Core
         }
 
         public virtual void Publish<TEvent>(TEvent @event)
-            where TEvent : IEvent, new()
+            where TEvent : class, new()
         {
             _client.Produce(typeof(TEvent).GetTopic(), @event);
         }
 
         public virtual Task PublishAsync<TEvent>(TEvent @event, CancellationToken cancellationToken) 
-            where TEvent : IEvent, new()
+            where TEvent : class, new()
         {
             return _client.ProduceAsync(typeof(TEvent).GetTopic(), @event, cancellationToken);
         }
 
         public virtual void Subscribe<TEvent>()
-            where TEvent : IEvent, new()
+            where TEvent : class, IEvent, new()
         {
             _client.Consume<TEvent>(typeof(TEvent).GetTopic(), async (@event) =>
             {
@@ -39,7 +39,7 @@ namespace Eiffel.Messaging.Core
         }
 
         public virtual Task SubscribeAsync<TEvent>(CancellationToken cancellationToken)
-            where TEvent : IEvent, new()
+            where TEvent : class, IEvent, new()
         {
             return _client.ConsumeAsync<TEvent>(typeof(TEvent).GetTopic(), async (@event) =>
             {

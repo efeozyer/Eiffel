@@ -28,7 +28,7 @@ namespace Eiffel.Messaging.Kafka
         }
 
         public virtual async Task ConsumeAsync<TMessage>(string topicName, Action<TMessage> dispatcher, CancellationToken cancellationToken)
-            where TMessage : IMessage, new()
+            where TMessage : class, new()
         {
             await Task.Factory.StartNew(() =>
             {
@@ -63,7 +63,7 @@ namespace Eiffel.Messaging.Kafka
         }
 
         public virtual void Consume<TMessage>(string topicName, Action<TMessage> dispatcher)
-            where TMessage : IMessage, new()
+            where TMessage : class, new()
         {
             _consumer.Subscribe(topicName);
             Task.Factory.StartNew(() =>
@@ -86,7 +86,7 @@ namespace Eiffel.Messaging.Kafka
         }
 
         public virtual async Task ProduceAsync<TMessage>(string topicName, TMessage message, CancellationToken cancellationToken)
-            where TMessage : IMessage, new()
+            where TMessage : class, new()
         {
             _ = await _producer.ProduceAsync(topicName, new Message<Null, byte[]>
             {
@@ -95,7 +95,7 @@ namespace Eiffel.Messaging.Kafka
         }
 
         public virtual void Produce<TMessage>(string topicName, TMessage message)
-            where TMessage : IMessage, new()
+            where TMessage : class, new()
         {
             _producer.Produce(topicName, new Message<Null, byte[]>
             {

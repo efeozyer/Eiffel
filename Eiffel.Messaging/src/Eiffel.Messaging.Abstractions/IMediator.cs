@@ -8,10 +8,10 @@ namespace Eiffel.Messaging.Abstractions
         Task<TReply> DispatchAsync<TReply>(IQuery<TReply> query, CancellationToken cancellationToken = default)
             where TReply : class;
         
-        Task DispatchAsync<TCommand>(TCommand command, CancellationToken cancellationToken = default) 
-            where TCommand : ICommand;
+        Task DispatchAsync<TMessage>(TMessage message, CancellationToken cancellationToken = default) 
+            where TMessage : class, IMessage;
 
         Task PublishAsync<TEvent>(TEvent @event, CancellationToken cancellationToken = default)
-            where TEvent : IEvent;
+            where TEvent : class, IEvent;
     }
 }

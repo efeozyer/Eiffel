@@ -18,8 +18,11 @@ namespace Eiffel.Messaging.Tests
         public MessageDispatcher_Unit_Tests()
         {
             _services = new ServiceCollection();
-            _services.AddMessageHandlers();
-            _services.AddMediator();
+            _services.AddSingleton<IMediator, Mediator>(serviceProvider =>
+            {
+                var options = new MiddlewareOptions();
+                return new Mediator(serviceProvider, options);
+            });
         }
 
         [Fact]
@@ -69,7 +72,7 @@ namespace Eiffel.Messaging.Tests
             _services.AddSingleton(typeof(IQueryHandler<MockQuery, MockQueryResult>), handlerMock.Object);
 
             // Act
-            await mediator.DispatchAsync(mockQuery, default);
+            await mediator.DispatchAsync<MockQueryResult>(mockQuery, default);
 
             // Assert
             handlerMock.Verify(x => x.HandleAsync(It.IsAny<MockQuery>(), It.IsAny<CancellationToken>()), Times.Once);

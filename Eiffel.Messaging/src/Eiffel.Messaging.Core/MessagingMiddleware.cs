@@ -10,20 +10,12 @@ namespace Eiffel.Messaging.Core
     internal class MessagingMiddleware
     {
         private readonly List<IMessagingMiddleware> _middlewares;
-        public MessagingMiddleware(List<IMessagingMiddleware> middlewares)
+        public MessagingMiddleware(MiddlewareOptions options)
         {
-            _middlewares = middlewares ?? throw new ArgumentNullException(nameof(middlewares));
+            _middlewares = options.GetMiddlewares();
         }
 
-        public Task<TReply> Handle<TReply>(dynamic handler, IQuery<TReply> message, CancellationToken cancellationToken)
-        {
-            _middlewares
-                .ForEach(async x => await HandleException(x.InvokeAsync(message, cancellationToken)));
-
-            return handler.HandleAsync(message, cancellationToken);
-        }
-
-        public Task Handle(dynamic handler, ICommand message, CancellationToken cancellationToken)
+        public Task<TReply> Invoke<TReply>(dynamic handler, IQuery<TReply> message, CancellationToken cancellationToken)
         {
             _middlewares
                 .ForEach(async x => await HandleException(x.InvokeAsync(message, cancellationToken)));
@@ -31,12 +23,28 @@ namespace Eiffel.Messaging.Core
             return handler.HandleAsync((dynamic)message, cancellationToken);
         }
 
-        public Task Handle(dynamic handler, IMessage message, CancellationToken cancellationToken)
+        public Task Invoke(dynamic handler, ICommand message, CancellationToken cancellationToken)
         {
             _middlewares
                 .ForEach(async x => await HandleException(x.InvokeAsync(message, cancellationToken)));
 
             return handler.HandleAsync((dynamic)message, cancellationToken);
+        }
+
+        public Task Invoke(dynamic handler, IMessage message, CancellationToken cancellationToken)
+        {
+            _middlewares
+                .ForEach(async x => await HandleException(x.InvokeAsync(message, cancellationToken)));
+
+            return handler.HandleAsync((dynamic)message, cancellationToken);
+        }
+
+        public void Invoke<TMessage>(TMessage message, Action action)
+        {
+            _middlewares
+                .ForEach(async x => await HandleException(x.InvokeAsync(message, default)));
+            
+            action.Invoke();
         }
 
         private Task HandleException(Task task)

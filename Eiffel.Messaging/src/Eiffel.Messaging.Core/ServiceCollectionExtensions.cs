@@ -2,8 +2,8 @@
 using Eiffel.Messaging.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 
 namespace Eiffel.Messaging.Core
 {
@@ -11,20 +11,15 @@ namespace Eiffel.Messaging.Core
     {
         public static IServiceCollection AddMediator(this IServiceCollection services, Action<MiddlewareOptions> options = null)
         {
-            MiddlewareOptions middlewareOptions = default;
-            if (options != null)
-            {
-                middlewareOptions = new MiddlewareOptions();
-                options.Invoke(middlewareOptions);
-            }
+            MiddlewareOptions middlewareOptions = new MiddlewareOptions();
+            options?.Invoke(middlewareOptions);
             
-            services.AddSingleton<IMediator, Mediator>(x =>
+            services.AddSingleton<IMediator>(serviceProvider =>
             {
-                return new Mediator(x, middlewareOptions?.GetMiddlewares() ?? new List<IMessagingMiddleware>());
+                return new Mediator(serviceProvider, middlewareOptions);
             });
 
             services.AddMessageHandlers();
-            services.AddMessagingMiddlewares();
             return services;
         }
 
@@ -36,41 +31,58 @@ namespace Eiffel.Messaging.Core
             return services;
         }
 
-        public static IServiceCollection AddMessagingMiddlewares(this IServiceCollection services)
+        public static IServiceCollection AddMessageBus<TClient, TConfig>(this IServiceCollection services, Action<MiddlewareOptions> options = null)
+            where TClient : class, IMessageQueueClient
+            where TConfig : class, IMessageQueueClientConfig
         {
-            services.RegisterType(typeof(IMessagingMiddleware));
-            return services;
-        }
+            MiddlewareOptions middlewareOptions = new MiddlewareOptions();
+            options?.Invoke(middlewareOptions);
 
-        public static IServiceCollection AddMessageBus(this IServiceCollection services, Action<MiddlewareOptions> options = null)
-        {
-            MiddlewareOptions middlewareOptions = default;
-            if (options != null)
+            services.AddSingleton(serviceProvider =>
             {
-                middlewareOptions = new MiddlewareOptions();
-                options.Invoke(middlewareOptions);
-            }
+                var config = Activator.CreateInstance<TConfig>();
+                return config.Bind(serviceProvider.GetRequiredService<IConfiguration>());
+            });
 
-            // TODO: Register message bus
+            services.AddSingleton(serviceProvider =>
+            {
+                var logger = serviceProvider.GetService<ILogger<TClient>>();
+                var config = serviceProvider.GetService<IMessageQueueClientConfig>();
+                return (IMessageQueueClient)Activator.CreateInstance(typeof(IMessageQueueClient), new object [] { logger, config });
+            });
+
+            services.AddSingleton(serviceProvider =>
+            {
+                var client = (IMessageQueueClient)serviceProvider.GetRequiredService(typeof(TClient));
+                var mediator = serviceProvider.GetRequiredService<IMediator>();
+                return new MessageBus(client, mediator, middlewareOptions);
+            });
             return services;
         }
 
-        public static IServiceCollection AddEventBus<TClient, TConfig>(this IServiceCollection services, IConfiguration config)
+        public static IServiceCollection AddEventBus<TClient, TConfig>(this IServiceCollection services)
             where TClient : class, IMessageQueueClient
-            where TConfig : class, IMessageClientConfig
+            where TConfig : class, IMessageQueueClientConfig
         {
-            var clientConfig = Activator.CreateInstance<TConfig>();
-            services.AddSingleton(clientConfig.Bind(config));
-            services.AddSingleton<IMessageQueueClient, TClient>();
-            services.AddSingleton<IEventBus, EventBus>();
-            return services;
-        }
+            services.AddSingleton(serviceProvider =>
+            {
+                var config = Activator.CreateInstance<TConfig>();
+                return config.Bind(serviceProvider.GetRequiredService<IConfiguration>());
+            });
 
-        public static IServiceCollection AddEventBus<TClient>(this IServiceCollection services, TClient client)
-            where TClient : class, IMessageQueueClient
-        {
-            services.AddSingleton<IMessageQueueClient>(client);
-            services.AddSingleton<IEventBus, EventBus>();
+            services.AddSingleton(serviceProvider =>
+            {
+                var logger = serviceProvider.GetService<ILogger<TClient>>();
+                var config = serviceProvider.GetService<IMessageQueueClientConfig>();
+                return (IMessageQueueClient)Activator.CreateInstance(typeof(IMessageQueueClient), new object[] { logger, config });
+            });
+
+            services.AddSingleton(serviceProvider =>
+            {
+                var client = (IMessageQueueClient)serviceProvider.GetRequiredService(typeof(TClient));
+                var mediator = serviceProvider.GetRequiredService<IMediator>();
+                return new EventBus(client, mediator);
+            });
             return services;
         }
 

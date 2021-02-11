@@ -33,7 +33,7 @@ namespace Eiffel.Messaging.Core
         {
             var serviceProvider = _services.BuildServiceProvider();
             var middlewares = serviceProvider.GetServices<IMessagingMiddleware>();
-            return middlewares.ToList();
+            return (middlewares ?? Enumerable.Empty<IMessagingMiddleware>()).ToList();
         }
     }
 }

@@ -18,7 +18,8 @@ namespace Eiffel.Messaging.InMemory
             _config = config ?? throw new ArgumentNullException(nameof(config));
         }
 
-        public virtual void Consume<TMessage>(string topicName, Action<TMessage> dispatcher) where TMessage : IMessage, new()
+        public virtual void Consume<TMessage>(string topicName, Action<TMessage> dispatcher) 
+            where TMessage : class, new()
         {
             CreateSubscription(topicName);
             _subscriptions[topicName].Subscribe((message) =>
@@ -27,8 +28,14 @@ namespace Eiffel.Messaging.InMemory
             });
         }
 
-        public virtual Task ConsumeAsync<TMessage>(string topicName, Action<TMessage> dispatcher, CancellationToken cancellationToken) where TMessage : IMessage, new()
+        public virtual Task ConsumeAsync<TMessage>(string topicName, Action<TMessage> dispatcher, CancellationToken cancellationToken = default)
+            where TMessage : class, new()
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                throw new OperationCanceledException();
+            }
+
             CreateSubscription(topicName);
             _subscriptions[topicName].Subscribe((message) =>
             {
@@ -37,14 +44,21 @@ namespace Eiffel.Messaging.InMemory
             return Task.CompletedTask;
         }
 
-        public virtual void Produce<TMessage>(string topicName, TMessage message) where TMessage : IMessage, new()
+        public virtual void Produce<TMessage>(string topicName, TMessage message) 
+            where TMessage : class, new()
         {
             CreateSubscription(topicName);
             _subscriptions[topicName].OnNext(message);
         }
 
-        public virtual Task ProduceAsync<TMessage>(string topicName, TMessage message, CancellationToken cancellationToken) where TMessage : IMessage, new()
+        public virtual Task ProduceAsync<TMessage>(string topicName, TMessage message, CancellationToken cancellationToken = default) 
+            where TMessage : class, new()
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                throw new OperationCanceledException();
+            }
+
             CreateSubscription(topicName);
              _subscriptions[topicName].OnNext(message);
             return Task.CompletedTask;

@@ -3,7 +3,7 @@ using Eiffel.Messaging.Abstractions;
 
 namespace Eiffel.Messaging.Kafka
 {
-    public class KafkaClientConfig : IMessageClientConfig
+    public class KafkaClientConfig : IMessageQueueClientConfig
     {
         public bool IsEnabled { get; set; }
         public bool EnableConsoleLogging { get; set; }

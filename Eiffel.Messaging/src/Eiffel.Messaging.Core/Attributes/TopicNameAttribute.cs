@@ -23,7 +23,7 @@ namespace Eiffel.Messaging.Core.Attributes
                 throw new ArgumentNullException($"TopicName attribute must be specified on {type.AssemblyQualifiedName}");
             }
 
-            var topicName = attribute.ConstructorArguments[0].Value as string;
+            var topicName = attribute.ConstructorArguments?[0].Value?.ToString();
             if (string.IsNullOrWhiteSpace(topicName))
             {
                 throw new ArgumentNullException($"{attribute.ConstructorArguments[0].GetType().Name} must be specified");

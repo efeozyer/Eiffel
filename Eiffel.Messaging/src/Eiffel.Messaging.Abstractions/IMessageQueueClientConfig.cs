@@ -2,7 +2,7 @@
 
 namespace Eiffel.Messaging.Abstractions
 {
-    public interface IMessageClientConfig
+    public interface IMessageQueueClientConfig
     {
         bool IsEnabled { get; set; }
         bool EnableConsoleLogging { get; set; }

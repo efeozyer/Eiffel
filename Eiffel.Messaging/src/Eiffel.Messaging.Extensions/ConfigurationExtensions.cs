@@ -5,7 +5,7 @@ namespace Eiffel.Messaging.Extensions
 {
     public static class ConfigurationExtensions
     {
-        public static IMessageClientConfig Bind(this IMessageClientConfig config, IConfiguration configuration)
+        public static IMessageQueueClientConfig Bind(this IMessageQueueClientConfig config, IConfiguration configuration)
         {
             configuration.GetSection("Messaging:Kafka").Bind(config);
             return config;

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Eiffel.Messaging.InMemory
 {
-    public class InMemoryClientConfig : IMessageClientConfig
+    public class InMemoryClientConfig : IMessageQueueClientConfig
     {
         public bool IsEnabled { get; set; }
         public bool EnableConsoleLogging { get; set; }

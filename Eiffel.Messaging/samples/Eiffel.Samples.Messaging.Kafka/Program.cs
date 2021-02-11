@@ -52,7 +52,7 @@ namespace Eiffel.Samples.Messaging.Kafka
         private static void ConfigureServices(HostBuilderContext hostBuilderContext, IServiceCollection services)
         {
             services.AddMediator();
-            services.AddEventBus<KafkaClient, KafkaClientConfig>(hostBuilderContext.Configuration);
+            services.AddEventBus<KafkaClient, KafkaClientConfig>();
             services.AddHostedService<WorkerService>();
         }
     }
