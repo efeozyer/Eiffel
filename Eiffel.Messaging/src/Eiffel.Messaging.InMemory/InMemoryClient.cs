@@ -1,6 +1,6 @@
 ﻿using Eiffel.Messaging.Abstractions;
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,12 +9,12 @@ namespace Eiffel.Messaging.InMemory
 {
     public class InMemoryClient : IMessageQueueClient
     {
-        private readonly Dictionary<string, Subject<dynamic>> _subscriptions;
+        private readonly ConcurrentDictionary<string, Subject<dynamic>> _subscriptions;
         private readonly InMemoryClientConfig _config;
 
         public InMemoryClient(InMemoryClientConfig config)
         {
-             _subscriptions = new Dictionary<string, Subject<dynamic>>();
+             _subscriptions = new ConcurrentDictionary<string, Subject<dynamic>>();
             _config = config ?? throw new ArgumentNullException(nameof(config));
         }
 
@@ -82,7 +82,9 @@ namespace Eiffel.Messaging.InMemory
         {
             if (!_subscriptions.ContainsKey(topicName))
             {
-                _subscriptions.Add(topicName, new Subject<dynamic>());
+                var result = _subscriptions.TryAdd(topicName, new Subject<dynamic>());
+                if (!result)
+                    throw new AccessViolationException();
             }
         }
     }
