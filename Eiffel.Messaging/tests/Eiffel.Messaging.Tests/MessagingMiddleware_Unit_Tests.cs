@@ -31,9 +31,9 @@ namespace Eiffel.Messaging.Tests
 
             _services.AddSingleton<IMediator, Mediator>(serviceProvider =>
             {
-                var options = new MiddlewareOptions();
-                options.Add(typeof(IMessagingMiddleware), _loggingMiddleware.Object);
-                options.Add(typeof(IMessagingMiddleware), _validationMiddleware.Object);
+                var options = new MessagingMiddlewareOptions();
+                options.AddMiddleware(typeof(IMessagingMiddleware), _loggingMiddleware.Object);
+                options.AddMiddleware(typeof(IMessagingMiddleware), _validationMiddleware.Object);
                 return new Mediator(serviceProvider, options);
             });
         }

@@ -12,7 +12,7 @@ namespace Eiffel.Messaging.Core
         private readonly IMessageQueueClient _client;
         private readonly IMediator _mediator;
 
-        public MessageBus(IMessageQueueClient client, IMediator mediator, MiddlewareOptions options)
+        public MessageBus(IMessageQueueClient client, IMediator mediator, MessagingMiddlewareOptions options)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));

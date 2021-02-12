@@ -7,6 +7,8 @@ using System.IO;
 using System.Threading.Tasks;
 using Eiffel.Messaging.Core;
 using Eiffel.Messaging.Kafka;
+using Eiffel.Messaging.Abstractions;
+using Eiffel.Samples.Messaging.Kafka.Middlewares;
 
 namespace Eiffel.Samples.Messaging.Kafka
 {
@@ -53,6 +55,10 @@ namespace Eiffel.Samples.Messaging.Kafka
         {
             services.AddMediator();
             services.AddEventBus<KafkaClient, KafkaClientConfig>();
+            services.AddMessageBus<KafkaClient, KafkaClientConfig>(options =>
+            {
+                options.AddMiddleware<IMessagingMiddleware, ValidationMiddleware>();
+            });
             services.AddHostedService<WorkerService>();
         }
     }

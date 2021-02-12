@@ -13,7 +13,7 @@ namespace Eiffel.Messaging.Core
         private readonly IServiceProvider _serviceProvider;
         private readonly MessagingMiddleware _messagingMiddleware;
 
-        public Mediator(IServiceProvider serviceProvider, MiddlewareOptions options)
+        public Mediator(IServiceProvider serviceProvider, MessagingMiddlewareOptions options)
         {
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _messagingMiddleware = new MessagingMiddleware(options);

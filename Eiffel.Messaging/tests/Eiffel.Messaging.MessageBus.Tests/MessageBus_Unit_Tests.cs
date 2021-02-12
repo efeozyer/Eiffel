@@ -33,7 +33,7 @@ namespace Eiffel.Messaging.MessageBus.Tests
             mockClient.Setup(x => x.ProduceAsync(It.IsAny<string>(), It.IsAny<MockMessage>(), It.IsAny<CancellationToken>()));
 
             var mockMediator = new Mock<IMediator>();
-            var messageBus = new Core.MessageBus(mockClient.Object, mockMediator.Object, new Core.MiddlewareOptions());
+            var messageBus = new Core.MessageBus(mockClient.Object, mockMediator.Object, new Core.MessagingMiddlewareOptions());
 
             // Act
             messageBus.Send(mockMessage);
@@ -54,7 +54,7 @@ namespace Eiffel.Messaging.MessageBus.Tests
             mockClient.Setup(x => x.ConsumeAsync(It.IsAny<string>(), It.IsAny<Action<MockMessage>>(), It.IsAny<CancellationToken>()));
 
             var mockMediator = new Mock<IMediator>();
-            var messageBus = new Core.MessageBus(mockClient.Object, mockMediator.Object, new Core.MiddlewareOptions());
+            var messageBus = new Core.MessageBus(mockClient.Object, mockMediator.Object, new Core.MessagingMiddlewareOptions());
 
             // Act
             messageBus.Subscribe<MockMessage>();
@@ -79,7 +79,7 @@ namespace Eiffel.Messaging.MessageBus.Tests
             mockClient.Setup(x => x.ProduceAsync(It.IsAny<string>(), It.IsAny<MockMessage>(), It.IsAny<CancellationToken>()));
 
             var mockMediator = new Mock<IMediator>();
-            var messageBus = new Core.MessageBus(mockClient.Object, mockMediator.Object, new Core.MiddlewareOptions());
+            var messageBus = new Core.MessageBus(mockClient.Object, mockMediator.Object, new Core.MessagingMiddlewareOptions());
 
             // Act
             messageBus.Send(mockMessage);
@@ -103,7 +103,7 @@ namespace Eiffel.Messaging.MessageBus.Tests
             mockClient.Setup(x => x.ConsumeAsync(It.IsAny<string>(), It.IsAny<Action<MockMessage>>(), It.IsAny<CancellationToken>()));
 
             var mockMediator = new Mock<IMediator>();
-            var messageBus = new Core.MessageBus(mockClient.Object, mockMediator.Object, new Core.MiddlewareOptions());
+            var messageBus = new Core.MessageBus(mockClient.Object, mockMediator.Object, new Core.MessagingMiddlewareOptions());
 
             // Act
             messageBus.Subscribe<MockMessage>();
@@ -122,7 +122,7 @@ namespace Eiffel.Messaging.MessageBus.Tests
             mockClient.Setup(x => x.Unsubscribe());
 
             var mockMediator = new Mock<IMediator>();
-            var messageBus = new Core.MessageBus(mockClient.Object, mockMediator.Object, new Core.MiddlewareOptions());
+            var messageBus = new Core.MessageBus(mockClient.Object, mockMediator.Object, new Core.MessagingMiddlewareOptions());
 
             // Act
             messageBus.Unsubscribe();

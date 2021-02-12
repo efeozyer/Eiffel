@@ -6,16 +6,16 @@ using System.Linq;
 
 namespace Eiffel.Messaging.Core
 {
-    public class MiddlewareOptions
+    public class MessagingMiddlewareOptions
     {
         private readonly IServiceCollection _services;
 
-        public MiddlewareOptions()
+        public MessagingMiddlewareOptions()
         {
             _services = new ServiceCollection();
         }
 
-        public MiddlewareOptions Add<TService, TImplementation>()
+        public MessagingMiddlewareOptions AddMiddleware<TService, TImplementation>()
             where TService : class, IMessagingMiddleware
             where TImplementation : class, TService
         {
@@ -23,7 +23,7 @@ namespace Eiffel.Messaging.Core
             return this;
         }
 
-        public MiddlewareOptions Add(Type type, object instance)
+        public MessagingMiddlewareOptions AddMiddleware(Type type, object instance)
         {
             _services.AddSingleton(type, instance);
             return this;

@@ -9,9 +9,9 @@ namespace Eiffel.Messaging.Core
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddMediator(this IServiceCollection services, Action<MiddlewareOptions> options = null)
+        public static IServiceCollection AddMediator(this IServiceCollection services, Action<MessagingMiddlewareOptions> options = null)
         {
-            MiddlewareOptions middlewareOptions = new MiddlewareOptions();
+            MessagingMiddlewareOptions middlewareOptions = new MessagingMiddlewareOptions();
             options?.Invoke(middlewareOptions);
             
             services.AddSingleton<IMediator>(serviceProvider =>
@@ -31,11 +31,11 @@ namespace Eiffel.Messaging.Core
             return services;
         }
 
-        public static IServiceCollection AddMessageBus<TClient, TConfig>(this IServiceCollection services, Action<MiddlewareOptions> options = null)
+        public static IServiceCollection AddMessageBus<TClient, TConfig>(this IServiceCollection services, Action<MessagingMiddlewareOptions> options = null)
             where TClient : class, IMessageQueueClient
             where TConfig : class, IMessageQueueClientConfig
         {
-            MiddlewareOptions middlewareOptions = new MiddlewareOptions();
+            MessagingMiddlewareOptions middlewareOptions = new MessagingMiddlewareOptions();
             options?.Invoke(middlewareOptions);
 
             services.AddSingleton(serviceProvider =>

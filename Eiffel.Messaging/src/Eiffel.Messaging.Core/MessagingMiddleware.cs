@@ -10,7 +10,7 @@ namespace Eiffel.Messaging.Core
     internal class MessagingMiddleware
     {
         private readonly List<IMessagingMiddleware> _middlewares;
-        public MessagingMiddleware(MiddlewareOptions options)
+        public MessagingMiddleware(MessagingMiddlewareOptions options)
         {
             _middlewares = options.GetMiddlewares();
         }

@@ -20,7 +20,7 @@ namespace Eiffel.Messaging.Tests
             _services = new ServiceCollection();
             _services.AddSingleton<IMediator, Mediator>(serviceProvider =>
             {
-                var options = new MiddlewareOptions();
+                var options = new MessagingMiddlewareOptions();
                 return new Mediator(serviceProvider, options);
             });
         }
