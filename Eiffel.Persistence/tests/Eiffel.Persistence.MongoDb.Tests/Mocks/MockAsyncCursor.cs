@@ -1,21 +1,23 @@
 ﻿using MongoDB.Driver;
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Eiffel.Persistence.MongoDb.Tests.Mocks
 {
-    public class MockAsyncCursor<T> : IAsyncCursor<T>
-        where T : class
+    public class MockAsyncCursor<TDocument> : IAsyncCursor<TDocument>
+        where TDocument : class
     {
-        private readonly List<T> _items = new List<T>();
+        private readonly List<TDocument> _documents = new List<TDocument>();
+        public IEnumerable<TDocument> Current => _documents;
 
-        public IEnumerable<T> Current => _items;
+        public MockAsyncCursor(IEnumerable<TDocument> documents)
+        {
+            AddRange(documents);
+        }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
         }
 
         public bool MoveNext(CancellationToken cancellationToken = default)
@@ -28,9 +30,14 @@ namespace Eiffel.Persistence.MongoDb.Tests.Mocks
             return Task.FromResult(true);
         }
 
-        public void Add(T item)
+        public void Add(TDocument document)
         {
-            _items.Add(item);
+            _documents.Add(document);
+        }
+
+        public void AddRange(IEnumerable<TDocument> documents)
+        {
+            _documents.AddRange(documents);
         }
     }
 }

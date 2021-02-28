@@ -5,7 +5,7 @@ namespace Eiffel.Persistence.MongoDb
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddDocumentContext<TContext>(this IServiceCollection services, DocumentContextOptions<TContext> options)
+        public static IServiceCollection AddDocumentContext<TContext>(this IServiceCollection services, DbContextOptions<TContext> options)
             where TContext : DbContext
         {
             services.Scan(x => x.FromApplicationDependencies()

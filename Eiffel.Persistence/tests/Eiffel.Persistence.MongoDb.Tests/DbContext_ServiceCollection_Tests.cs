@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using FluentAssertions;
+using MongoDB.Driver;
 
 namespace Eiffel.Persistence.MongoDb.Tests
 {
@@ -18,7 +19,7 @@ namespace Eiffel.Persistence.MongoDb.Tests
         public void Should_Register_CollectionTypeConfigurations()
         {
             // Arrange
-            _services.AddDocumentContext(new DocumentContextOptions<MockDocumentContext>("localhost", 27017)
+            _services.AddDocumentContext(new DbContextOptions<MockDbContext>(new MongoClientSettings())
             {
                 Database = "mock-database"
             });

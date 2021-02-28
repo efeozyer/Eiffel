@@ -48,8 +48,8 @@ namespace Eiffel.Persistence.MongoDb.Tests
             var mockClient = new Mock<IMongoClient>();
             mockClient.Setup(x => x.GetDatabase(It.IsAny<string>(), It.IsAny<MongoDatabaseSettings>())).Returns(mockDatabase.Object);
 
-            var mockOptions = new Mock<DocumentContextOptions<MockDocumentContext>>(new MongoClientSettings()) { CallBase = true };
-            var mockContext = new Mock<MockDocumentContext>(new[] { mockOptions.Object }) { CallBase = true };
+            var mockOptions = new Mock<DbContextOptions<MockDbContext>>(new MongoClientSettings()) { CallBase = true };
+            var mockContext = new Mock<MockDbContext>(new[] { mockOptions.Object }) { CallBase = true };
             mockContext.SetupGet(x => x.Database).Returns(mockDatabase.Object);
             mockContext.SetupGet(x => x.Client).Returns(mockClient.Object);
 
@@ -62,15 +62,14 @@ namespace Eiffel.Persistence.MongoDb.Tests
             var serviceProvider = _services.BuildServiceProvider();
 
             // Act
-            DbContextBinder<MockDocumentContext>.Bind(mockContext.Object, serviceProvider);
-            var context = serviceProvider.GetRequiredService<MockDocumentContext>();
+            DbContextBinder<MockDbContext>.Bind(mockContext.Object, serviceProvider);
+            var context = serviceProvider.GetRequiredService<MockDbContext>();
 
             // Assert
             mockDatabase.Verify(x => x.GetCollection<MockUserCollection>(It.IsAny<string>(), It.IsAny<MongoCollectionSettings>()), Times.Once);
             mockClient.Verify(x => x.GetDatabase(It.IsAny<string>(), It.IsAny<MongoDatabaseSettings>()), Times.Once);
             mockContext.Verify(x => x.Database, Times.AtLeastOnce());
             context.Users.Should().NotBeNull();
-            context.Users.ToList().Count.Should().Be(1);
         }
 
         private IAsyncCursor<TDocument> CreateCursor<TDocument>(IBsonSerializer<TDocument> serializer, int count)
@@ -79,8 +78,8 @@ namespace Eiffel.Persistence.MongoDb.Tests
                 .Select(i => Activator.CreateInstance<TDocument>())
                 .ToArray();
 
-            return new AsyncCursor<TDocument>(
-                channelSource: new Mock<IChannelSource>().Object,
+                return new AsyncCursor<TDocument>(
+                channelSource: new Mock<IChannelSource>() { CallBase =  true }.Object,
                 collectionNamespace: new CollectionNamespace("test", "test"),
                 query: new BsonDocument(),
                 firstBatch: firstBatch,

@@ -11,14 +11,14 @@ namespace Eiffel.Persistence.MongoDb
         public abstract MongoClientSettings ClientSettings { get; set; }
     }
 
-    public class DocumentContextOptions<TContext> : DbContextOptions
+    public class DbContextOptions<TContext> : DbContextOptions
     {
-        public DocumentContextOptions(MongoClientSettings clientSettings)
+        public DbContextOptions(MongoClientSettings clientSettings)
         {
             ClientSettings = clientSettings;
         }
 
-        public DocumentContextOptions(string host, int port)
+        public DbContextOptions(string host, int port)
         {
             ClientSettings = new MongoClientSettings
             {

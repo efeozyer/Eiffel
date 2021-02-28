@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Eiffel.Persistence.Abstractions\Eiffel.Persistence.Abstractions.csproj" />
     <ProjectReference Include="..\Eiffel.Persistence.Core\Eiffel.Persistence.Core.csproj" />
   </ItemGroup>
 
