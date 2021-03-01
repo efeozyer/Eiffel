@@ -19,6 +19,7 @@ namespace Eiffel.Persistence.MongoDb
                 if (collection == null)
                 {
                     context.Database.CreateCollection(config.Name);
+                    collection = context.Database.GetCollection(config.Name);
                 }
 
                 property.SetValue(context, CreateCollectionSet(property, collection));
