@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Eiffel.Persistence.Core\Eiffel.Persistence.Core.csproj" />
     <ProjectReference Include="..\..\src\Eiffel.Persistence.MongoDb\Eiffel.Persistence.MongoDb.csproj" />
+    <ProjectReference Include="..\Eiffel.Persistence.Shared\Eiffel.Persistence.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
