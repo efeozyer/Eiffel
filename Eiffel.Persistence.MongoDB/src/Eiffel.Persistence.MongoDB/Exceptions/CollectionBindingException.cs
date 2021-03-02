@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Eiffel.Persistence.Core
+namespace Eiffel.Persistence.MongoDB
 {
     [Serializable]
     public class CollectionBindingException : Exception
