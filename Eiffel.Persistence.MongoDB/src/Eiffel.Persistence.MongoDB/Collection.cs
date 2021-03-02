@@ -66,7 +66,7 @@ namespace Eiffel.Persistence.MongoDB
 
         public void Add(TDocument document)
         {
-            _collection.InsertOne(document, null, default);
+            InsertOne(document, null, default);
         }
 
         public Task AddAsync(TDocument document, CancellationToken cancellationToken = default)
