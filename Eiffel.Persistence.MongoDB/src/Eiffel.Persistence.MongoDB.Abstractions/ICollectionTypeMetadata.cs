@@ -10,7 +10,7 @@ namespace Eiffel.Persistence.MongoDB.Abstractions
     {
         string CollectionName { get; }
         IEnumerable<TCollection> Data { get; }
-        Expression<Func<TCollection, bool>> FilterExpression { get}
+        Expression<Func<TCollection, bool>> FilterExpression { get; }
         DocumentValidationAction ValidationAction { get; }
         DocumentValidationLevel ValidationLevel { get; }
         bool? IsCapped { get; }
