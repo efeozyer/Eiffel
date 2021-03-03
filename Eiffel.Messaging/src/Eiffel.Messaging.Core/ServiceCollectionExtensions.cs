@@ -41,19 +41,11 @@ namespace Eiffel.Messaging.Core
             services.AddSingleton(serviceProvider =>
             {
                 var config = Activator.CreateInstance<TConfig>();
-                return config.Bind(serviceProvider.GetRequiredService<IConfiguration>());
-            });
+                config.Bind(serviceProvider.GetRequiredService<IConfiguration>());
 
-            services.AddSingleton(serviceProvider =>
-            {
                 var logger = serviceProvider.GetService<ILogger<TClient>>();
-                var config = serviceProvider.GetService<IMessageQueueClientConfig>();
-                return (IMessageQueueClient)Activator.CreateInstance(typeof(IMessageQueueClient), new object [] { logger, config });
-            });
+                var client = (IMessageQueueClient)Activator.CreateInstance(typeof(TClient), new object[] { logger, config });
 
-            services.AddSingleton(serviceProvider =>
-            {
-                var client = (IMessageQueueClient)serviceProvider.GetRequiredService(typeof(TClient));
                 var mediator = serviceProvider.GetRequiredService<IMediator>();
                 return new MessageBus(client, mediator, middlewareOptions);
             });
@@ -64,22 +56,14 @@ namespace Eiffel.Messaging.Core
             where TClient : class, IMessageQueueClient
             where TConfig : class, IMessageQueueClientConfig
         {
-            services.AddSingleton(serviceProvider =>
+            services.AddSingleton<IEventBus>(serviceProvider =>
             {
                 var config = Activator.CreateInstance<TConfig>();
-                return config.Bind(serviceProvider.GetRequiredService<IConfiguration>());
-            });
+                config.Bind(serviceProvider.GetRequiredService<IConfiguration>());
 
-            services.AddSingleton(serviceProvider =>
-            {
                 var logger = serviceProvider.GetService<ILogger<TClient>>();
-                var config = serviceProvider.GetService<IMessageQueueClientConfig>();
-                return (IMessageQueueClient)Activator.CreateInstance(typeof(IMessageQueueClient), new object[] { logger, config });
-            });
+                var client = (IMessageQueueClient)Activator.CreateInstance(typeof(TClient), new object[] { logger, config });
 
-            services.AddSingleton(serviceProvider =>
-            {
-                var client = (IMessageQueueClient)serviceProvider.GetRequiredService(typeof(TClient));
                 var mediator = serviceProvider.GetRequiredService<IMediator>();
                 return new EventBus(client, mediator);
             });
