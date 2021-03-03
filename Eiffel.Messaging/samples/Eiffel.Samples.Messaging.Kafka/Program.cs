@@ -14,6 +14,8 @@ namespace Eiffel.Samples.Messaging.Kafka
 {
     public class Program
     {
+        protected Program() { }
+
        public static async Task Main(string[] args)
         {
             var serviceHost = CreateHostBuilder(args).Build();
@@ -51,14 +53,24 @@ namespace Eiffel.Samples.Messaging.Kafka
             return hostBuilder;
         }
 
-        private static void ConfigureServices(HostBuilderContext hostBuilderContext, IServiceCollection services)
+        private static void ConfigureServices(HostBuilderContext builderContext, IServiceCollection services)
         {
             services.AddMediator();
+
+            // NOTE: You can only use one of the two options 
+            // You can specify different brokers for Events and Messages
             services.AddEventBus<KafkaClient, KafkaClientConfig>();
             services.AddMessageBus<KafkaClient, KafkaClientConfig>(options =>
             {
                 options.AddMiddleware<IMessagingMiddleware, ValidationMiddleware>();
             });
+
+            // Also you can use same broker in both
+            services.AddMessaging<KafkaClient, KafkaClientConfig>(options =>
+            {
+                options.AddMiddleware<IMessagingMiddleware, ValidationMiddleware>();
+            });
+
             services.AddHostedService<WorkerService>();
         }
     }

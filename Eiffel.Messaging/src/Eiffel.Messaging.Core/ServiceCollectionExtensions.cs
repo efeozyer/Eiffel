@@ -86,6 +86,15 @@ namespace Eiffel.Messaging.Core
             return services;
         }
 
+        public static IServiceCollection AddMessaging<TClient, TConfig>(this IServiceCollection services, Action<MessagingMiddlewareOptions> options = null)
+            where TClient : class, IMessageQueueClient
+            where TConfig : class, IMessageQueueClientConfig
+        {
+            services.AddMessageBus<TClient, TConfig>(options);
+            services.AddEventBus<TClient, TConfig>();
+            return services;
+        }
+
         private static void RegisterType(this IServiceCollection services, Type targetType)
         {
             services.Scan(x => x.FromApplicationDependencies()
