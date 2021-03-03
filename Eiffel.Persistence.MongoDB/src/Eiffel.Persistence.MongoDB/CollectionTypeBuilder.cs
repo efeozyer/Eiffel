@@ -8,83 +8,83 @@ using System.Text;
 
 namespace Eiffel.Persistence.MongoDB
 {
-    public class CollectionTypeBuilder<TEntity> : ICollectionTypeBuilder<TEntity>
-        where TEntity : class
+    public class CollectionTypeBuilder<TCollection> : ICollectionTypeBuilder<TCollection>
+        where TCollection : class
     {
-        private readonly CollectionTypeMetadata<TEntity> _metadata;
-        private readonly List<FilterDefinition<TEntity>> _validationRules;
-        private readonly List<IndexKeysDefinition<TEntity>> _indexKeys;
+        private readonly CollectionTypeMetadata<TCollection> _metadata;
+        private readonly List<FilterDefinition<TCollection>> _validationRules;
+        private readonly List<IndexKeysDefinition<TCollection>> _indexKeys;
 
         public CollectionTypeBuilder()
         {
-            _metadata = new CollectionTypeMetadata<TEntity>();
-            _validationRules = new List<FilterDefinition<TEntity>>();
-            _indexKeys = new List<IndexKeysDefinition<TEntity>>();
+            _metadata = new CollectionTypeMetadata<TCollection>();
+            _validationRules = new List<FilterDefinition<TCollection>>();
+            _indexKeys = new List<IndexKeysDefinition<TCollection>>();
         }
 
-        public ICollectionTypeBuilder<TEntity> ToCollection(string name)
+        public ICollectionTypeBuilder<TCollection> ToCollection(string name)
         {
             _metadata.CollectionName = name;
             return this;
         }
 
-        public ICollectionTypeBuilder<TEntity> HasQueryFilter(Expression<Func<TEntity, bool>> expression)
+        public ICollectionTypeBuilder<TCollection> HasQueryFilter(Expression<Func<TCollection, bool>> expression)
         {
             _metadata.FilterExpression = _metadata.FilterExpression == null ? expression : _metadata.FilterExpression.CombineWith(expression);
             return this;
         }
 
         // TODO: Implement all index types
-        public ICollectionTypeBuilder<TEntity> HasIndex(Expression<Func<TEntity, object>> expression, bool isAscending = true)
+        public ICollectionTypeBuilder<TCollection> HasIndex(Expression<Func<TCollection, object>> expression, bool isAscending = true)
         {
             if (isAscending)
             {
-                _indexKeys.Add(Builders<TEntity>.IndexKeys.Ascending(expression));
+                _indexKeys.Add(Builders<TCollection>.IndexKeys.Ascending(expression));
             }
             else
             {
-                _indexKeys.Add(Builders<TEntity>.IndexKeys.Descending(expression));
+                _indexKeys.Add(Builders<TCollection>.IndexKeys.Descending(expression));
             }
             return this;
         }
 
-        public ICollectionTypeBuilder<TEntity> HasData(IEnumerable<TEntity> data)
+        public ICollectionTypeBuilder<TCollection> HasData(IEnumerable<TCollection> data)
         {
             _metadata.Data = data;
             return this;
         }
 
-        public ICollectionTypeBuilder<TEntity> IsRequired(Expression<Func<TEntity, object>> expression, bool isRequired = true)
+        public ICollectionTypeBuilder<TCollection> IsRequired(Expression<Func<TCollection, object>> expression, bool isRequired = true)
         {
-            _validationRules.Add(Builders<TEntity>.Filter.Exists(expression, isRequired));
+            _validationRules.Add(Builders<TCollection>.Filter.Exists(expression, isRequired));
             return this;
         }
 
-        public ICollectionTypeBuilder<TEntity> Type(Expression<Func<TEntity, object>> expression, BsonType valueType)
+        public ICollectionTypeBuilder<TCollection> Type(Expression<Func<TCollection, object>> expression, BsonType valueType)
         {
-            _validationRules.Add(Builders<TEntity>.Filter.Type(expression, valueType));
+            _validationRules.Add(Builders<TCollection>.Filter.Type(expression, valueType));
             return this;
         }
 
-        public ICollectionTypeBuilder<TEntity> ValidationLevel(DocumentValidationLevel validationLevel)
+        public ICollectionTypeBuilder<TCollection> ValidationLevel(DocumentValidationLevel validationLevel)
         {
             _metadata.ValidationLevel = validationLevel;
             return this;
         }
 
-        public ICollectionTypeBuilder<TEntity> ValidationAction(DocumentValidationAction validationAction)
+        public ICollectionTypeBuilder<TCollection> ValidationAction(DocumentValidationAction validationAction)
         {
             _metadata.ValidationAction = validationAction;
             return this;
         }
 
-        public ICollectionTypeBuilder<TEntity> UsePowerOf2Sizes(bool usePowerOf2Sizes)
+        public ICollectionTypeBuilder<TCollection> UsePowerOf2Sizes(bool usePowerOf2Sizes)
         {
             _metadata.CollectionOptions.UsePowerOf2Sizes = usePowerOf2Sizes;
             return this;
         }
 
-        public ICollectionTypeBuilder<TEntity> IsCapped(bool isCapped, long? maxSize, long? maxDocuments)
+        public ICollectionTypeBuilder<TCollection> IsCapped(bool isCapped, long? maxSize, long? maxDocuments)
         {
             _metadata.IsCapped = isCapped;
             _metadata.MaxSize = maxSize;
@@ -92,62 +92,62 @@ namespace Eiffel.Persistence.MongoDB
             return this;
         }
 
-        public ICollectionTypeBuilder<TEntity> Collation(Collation collation)
+        public ICollectionTypeBuilder<TCollection> Collation(Collation collation)
         {
             _metadata.CollectionOptions.Collation = collation;
             return this;
         }
 
-        public ICollectionTypeBuilder<TEntity> NoPadding(bool noPadding)
+        public ICollectionTypeBuilder<TCollection> NoPadding(bool noPadding)
         {
             _metadata.CollectionOptions.NoPadding = noPadding;
             return this;
         }
 
-        public ICollectionTypeBuilder<TEntity> StorageEngine(BsonDocument storageEngine)
+        public ICollectionTypeBuilder<TCollection> StorageEngine(BsonDocument storageEngine)
         {
             _metadata.CollectionOptions.StorageEngine = storageEngine;
             return this;
         }
 
-        public ICollectionTypeBuilder<TEntity> AssignIdOnInsert(bool assignIdOnInsert)
+        public ICollectionTypeBuilder<TCollection> AssignIdOnInsert(bool assignIdOnInsert)
         {
             _metadata.ColletionSettings.AssignIdOnInsert = assignIdOnInsert;
             return this;
         }
 
-        public ICollectionTypeBuilder<TEntity> ReadConcern(ReadConcern readConcern)
+        public ICollectionTypeBuilder<TCollection> ReadConcern(ReadConcern readConcern)
         {
             _metadata.ColletionSettings.ReadConcern = readConcern;
             return this;
         }
 
-        public ICollectionTypeBuilder<TEntity> ReadEncoding(UTF8Encoding readEncoding)
+        public ICollectionTypeBuilder<TCollection> ReadEncoding(UTF8Encoding readEncoding)
         {
             _metadata.ColletionSettings.ReadEncoding = readEncoding;
             return this;
         }
 
-        public ICollectionTypeBuilder<TEntity> ReadPreference(ReadPreference readPreference)
+        public ICollectionTypeBuilder<TCollection> ReadPreference(ReadPreference readPreference)
         {
             _metadata.ColletionSettings.ReadPreference = readPreference;
             return this;
         }
 
-        public ICollectionTypeBuilder<TEntity> WriteConcern(WriteConcern writeConcern)
+        public ICollectionTypeBuilder<TCollection> WriteConcern(WriteConcern writeConcern)
         {
             _metadata.ColletionSettings.WriteConcern = writeConcern;
             return this;
         }
 
-        public ICollectionTypeBuilder<TEntity> WriteEncoding(UTF8Encoding writeEnconding)
+        public ICollectionTypeBuilder<TCollection> WriteEncoding(UTF8Encoding writeEnconding)
         {
             _metadata.ColletionSettings.WriteEncoding = writeEnconding;
             return this;
         }
 
         // TODO : Create index options
-        public CollectionTypeMetadata<TEntity> Build()
+        public ICollectionTypeMetadata<TCollection> Build()
         {
             if (_metadata.IsCapped.HasValue && _metadata.IsCapped.Value)
             {
@@ -157,7 +157,7 @@ namespace Eiffel.Persistence.MongoDB
 
             if (_validationRules?.Count > 0)
             {
-                _metadata.CollectionOptions.Validator = new FilterDefinitionBuilder<TEntity>().And(_validationRules);
+                _metadata.CollectionOptions.Validator = new FilterDefinitionBuilder<TCollection>().And(_validationRules);
                 _metadata.CollectionOptions.ValidationAction = _metadata.ValidationAction;
                 _metadata.CollectionOptions.ValidationLevel = _metadata.ValidationLevel;
             }
