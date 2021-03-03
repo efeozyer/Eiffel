@@ -59,11 +59,11 @@ namespace Eiffel.Persistence.MongoDB.Tests
                     {
                         if (FilterDefinition<TDocument>.Empty == definition || definition == null)
                         {
-                            return CreateCursor(_documents);
+                            return MockCursorBuilder<TDocument>.Build(_documents);
                         }
 
                         Expression<Func<TDocument, bool>> expression = ((dynamic)definition).Expression;
-                        return CreateCursor(_documents.Where(expression.Compile()));
+                        return MockCursorBuilder<TDocument>.Build(_documents.Where(expression.Compile()));
                     });
 
             _collection.Setup(x =>
@@ -72,11 +72,11 @@ namespace Eiffel.Persistence.MongoDB.Tests
                     {
                         if (FilterDefinition<TDocument>.Empty == definition || definition == null)
                         {
-                            return CreateCursor(_documents);
+                            return MockCursorBuilder<TDocument>.Build(_documents);
                         }
 
                         Expression<Func<TDocument, bool>> expression = ((dynamic)definition).Expression;
-                        return CreateCursor(_documents.Where(expression.Compile()));
+                        return MockCursorBuilder<TDocument>.Build(_documents.Where(expression.Compile()));
                     });
 
             return this;
@@ -88,7 +88,7 @@ namespace Eiffel.Persistence.MongoDB.Tests
                    .Returns((PipelineDefinition<TDocument, TDocument> pipeline, AggregateOptions options, CancellationToken cancellationToken) =>
                    {
                        // TODO: Aggregate pipeline stages via Linq
-                       return CreateCursor(_documents);
+                       return MockCursorBuilder<TDocument>.Build(_documents);
                    });
 
             _collection.Setup(x =>
@@ -96,7 +96,7 @@ namespace Eiffel.Persistence.MongoDB.Tests
                    .ReturnsAsync((PipelineDefinition<TDocument, TDocument> pipeline, AggregateOptions options, CancellationToken cancellationToken) =>
                    {
                        // TODO: Aggregate pipeline stages via Linq
-                       return CreateCursor(_documents);
+                       return MockCursorBuilder<TDocument>.Build(_documents);
                    });
 
             return this;
@@ -211,17 +211,6 @@ namespace Eiffel.Persistence.MongoDB.Tests
         public Mock<IMongoCollection<TDocument>> Build()
         {
             return _collection;
-        }
-
-        private IAsyncCursor<TDocument> CreateCursor(IEnumerable<TDocument> documents)
-        {
-            var mockCursor = new Mock<IAsyncCursor<TDocument>>() { CallBase = true };
-            mockCursor.Setup(_ => _.Current).Returns(documents);
-            mockCursor
-                .SetupSequence(_ => _.MoveNext(It.IsAny<CancellationToken>()))
-                .Returns(true)
-                .Returns(false);
-            return mockCursor.Object;
         }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using Moq;
 using System.Collections.Generic;
+using System.Threading;
 using Xunit;
 
 namespace Eiffel.Persistence.MongoDB.Tests
@@ -28,7 +29,10 @@ namespace Eiffel.Persistence.MongoDB.Tests
                 .WithCount()
                 .Build();
 
-            var mockDatabase = new MockDatabaseBuilder<MockUserCollection>(mockCollection.Object).Build();
+            var mockDatabase = new MockDatabaseBuilder<MockUserCollection>(mockCollection.Object)
+                .WithCollections(new string[0])
+                .Build();
+
             var mockClient = new MockClientBuilder(mockDatabase.Object).Build();
 
             var mockOptions = new Mock<DbContextOptions<MockDbContext>>(new MongoClientSettings()) { CallBase = true };
@@ -50,6 +54,7 @@ namespace Eiffel.Persistence.MongoDB.Tests
             var context = serviceProvider.GetRequiredService<MockDbContext>();
 
             // Assert
+            mockDatabase.Verify(x => x.CreateCollection(It.IsAny<string>(), It.IsAny<CreateCollectionOptions>(), It.IsAny<CancellationToken>()), Times.Once);
             mockDatabase.Verify(x => x.GetCollection<MockUserCollection>(It.IsAny<string>(), It.IsAny<MongoCollectionSettings>()), Times.Once);
             mockClient.Verify(x => x.GetDatabase(It.IsAny<string>(), It.IsAny<MongoDatabaseSettings>()), Times.Once);
             mockContext.Verify(x => x.Database, Times.AtLeastOnce());

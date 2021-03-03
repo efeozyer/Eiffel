@@ -1,5 +1,8 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using Moq;
+using System.Linq;
+using System.Threading;
 
 namespace Eiffel.Persistence.MongoDB.Tests
 {
@@ -12,6 +15,22 @@ namespace Eiffel.Persistence.MongoDB.Tests
         {
             _database = new Mock<IMongoDatabase>();
             _collection = collection;
+        }
+
+        public MockDatabaseBuilder<TDocument> WithCollections(string[] collectionNames)
+        {
+            _database.Setup(x => x.ListCollections(It.IsAny<ListCollectionsOptions>(), It.IsAny<CancellationToken>())).Returns(() =>
+            {
+                var collections = collectionNames.Select(x => BsonDocument.Create(new { name = x }));
+                return MockCursorBuilder<BsonDocument>.Build(collections);
+            });
+
+            _database.Setup(x => x.ListCollectionsAsync(It.IsAny<ListCollectionsOptions>(), It.IsAny<CancellationToken>())).ReturnsAsync(() =>
+            {
+                var collections = collectionNames.Select(x => BsonDocument.Create(new { name = x }));
+                return MockCursorBuilder<BsonDocument>.Build(collections);
+            });
+            return this;
         }
 
         public Mock<IMongoDatabase> Build()

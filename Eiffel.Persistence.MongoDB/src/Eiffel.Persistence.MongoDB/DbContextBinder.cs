@@ -12,21 +12,22 @@ namespace Eiffel.Persistence.MongoDB
     {
         public static void Bind(TContext context, IServiceProvider serviceProvider)
         {
-            foreach (var property in GetProperties(context))
+            var existingCollections = context.Database.ListCollections().ToListAsync().Result;
+            foreach(var property in GetDbContextProperties(context))
             {
-                var config = GetCollectionConfig(property, serviceProvider);
-                var collection = GetCollection(context, config.Name, property.PropertyType.GetGenericArguments()[0], config.CollectionSettings);
-                if (collection == null)
+                var metadata = GetCollectionMetadata(property, serviceProvider);
+                if (!existingCollections.Select(x => x["name"].AsString).Contains((metadata.CollectionName as string)))
                 {
-                    context.Database.CreateCollection(config.Name);
-                    collection = context.Database.GetCollection(config.Name);
+                    context.Database.CreateCollection(metadata.CollectionName, metadata.CollectionOptions);
                 }
 
-                property.SetValue(context, CreateCollectionSet(property, collection));
+                var collection = GetCollection(context, metadata.CollectionName, property.PropertyType, metadata.ColletionSettings);
+                var contextCollection = CreateCollection(property.PropertyType, collection);
+                property.SetValue(context, contextCollection);
             }
         }
 
-        private static IEnumerable<PropertyInfo> GetProperties(TContext context)
+        private static IEnumerable<PropertyInfo> GetDbContextProperties(TContext context)
         {
             List<PropertyInfo> properties = new List<PropertyInfo>();
             foreach (var property in context.GetType().GetProperties().Where(x => x.PropertyType.IsGenericType))
@@ -39,30 +40,38 @@ namespace Eiffel.Persistence.MongoDB
             return properties;
         }
 
-        private static dynamic GetCollectionConfig(PropertyInfo property, IServiceProvider serviceProvider)
+        private static dynamic GetCollectionMetadata(PropertyInfo propertyInfo, IServiceProvider serviceProvider)
         {
-            var configType = typeof(ICollectionTypeConfiguration<>).MakeGenericType(property.PropertyType.GetGenericArguments());
-            var collectionConfig = (dynamic)serviceProvider.GetService(configType);
-            if (collectionConfig == null)
-            {
-                throw new CollectionBindingException($"{property.Name} ICollectionTypeConfiguration could not be found.");
-            }
-            return collectionConfig;
+            var collectionTypeConfig = GetCollectionConfiguration(propertyInfo.PropertyType, serviceProvider);
+            var collectionTypeBuilder = CreateCollectionTypeBuilder(propertyInfo.PropertyType);
+            collectionTypeConfig.Configure(collectionTypeBuilder);
+            return collectionTypeBuilder.Build();
         }
 
-        private static object CreateCollectionSet(PropertyInfo property, object mongoCollection)
+        private static dynamic GetCollectionConfiguration(Type propertyType, IServiceProvider serviceProvider)
         {
-            var collectionType = typeof(Collection<>).MakeGenericType(property.PropertyType.GetGenericArguments());
-            return Activator.CreateInstance(collectionType, new[] { mongoCollection });
+            var instanceType = typeof(ICollectionTypeConfiguration<>).MakeGenericType(propertyType.GetGenericArguments()[0]);
+            return serviceProvider.GetService(instanceType);
         }
 
-        private static object GetCollection(TContext context, string collectionName, Type collectionType, MongoCollectionSettings collectionSettings = null)
+        private static dynamic CreateCollectionTypeBuilder(Type propertyType)
+        {
+            var instanceType = typeof(CollectionTypeBuilder<>).MakeGenericType(propertyType.GetGenericArguments()[0]);
+            return Activator.CreateInstance(instanceType);
+        }
+
+        private static dynamic GetCollection(TContext context, string collectionName, Type collectionType, MongoCollectionSettings collectionSettings = null)
         {
             var getCollectionMethod = context.Database.GetType().GetMethod("GetCollection")
-                .MakeGenericMethod(new[] { collectionType });
+                .MakeGenericMethod(collectionType.GetGenericArguments()[0]);
 
             return (dynamic)getCollectionMethod.Invoke(context.Database, new object[] { collectionName, collectionSettings });
         }
-    }
 
+        private static object CreateCollection(Type collectionType, object mongoCollection)
+        {
+            var instanceType = typeof(Collection<>).MakeGenericType(collectionType.GetGenericArguments()[0]);
+            return Activator.CreateInstance(instanceType, new[] { mongoCollection });
+        }
+    }
 }
