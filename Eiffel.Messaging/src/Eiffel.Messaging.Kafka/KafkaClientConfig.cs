@@ -5,6 +5,7 @@ namespace Eiffel.Messaging.Kafka
 {
     public class KafkaClientConfig : IMessageQueueClientConfig
     {
+        public string Name => "Kafka";
         public bool IsEnabled { get; set; }
         public bool EnableConsoleLogging { get; set; }
         public ConsumerConfig ConsumerConfig { get; set; }
