@@ -9,11 +9,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{5C8A9291
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{8B1E4308-26C6-41B4-9155-3E9E256B7BA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eiffel.Persistence.MongoDB.Abstractions", "src\Eiffel.Persistence.MongoDB.Abstractions\Eiffel.Persistence.MongoDB.Abstractions.csproj", "{76804532-876B-4B53-A094-F1D3CE31EF5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eiffel.Persistence.MongoDB.Abstractions", "src\Eiffel.Persistence.MongoDB.Abstractions\Eiffel.Persistence.MongoDB.Abstractions.csproj", "{76804532-876B-4B53-A094-F1D3CE31EF5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eiffel.Persistence.MongoDB", "src\Eiffel.Persistence.MongoDB\Eiffel.Persistence.MongoDB.csproj", "{2CA0519A-C764-4B07-A28E-74C336795FA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eiffel.Persistence.MongoDB", "src\Eiffel.Persistence.MongoDB\Eiffel.Persistence.MongoDB.csproj", "{2CA0519A-C764-4B07-A28E-74C336795FA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eiffel.Persistence.MongoDB.Tests", "tests\Eiffel.Persistence.MongoDB.Tests\Eiffel.Persistence.MongoDB.Tests.csproj", "{D1D05B13-72FD-40B9-AB0C-C7143CC16ADA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eiffel.Persistence.MongoDB.Tests", "tests\Eiffel.Persistence.MongoDB.Tests\Eiffel.Persistence.MongoDB.Tests.csproj", "{D1D05B13-72FD-40B9-AB0C-C7143CC16ADA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eiffel.Persistence.Samples.MongoDB", "samples\Eiffel.Persistence.Samples.MongoDB\Eiffel.Persistence.Samples.MongoDB.csproj", "{713E563C-C8E0-488D-9F16-694BF6B4EC78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{D1D05B13-72FD-40B9-AB0C-C7143CC16ADA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1D05B13-72FD-40B9-AB0C-C7143CC16ADA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1D05B13-72FD-40B9-AB0C-C7143CC16ADA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{713E563C-C8E0-488D-9F16-694BF6B4EC78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{713E563C-C8E0-488D-9F16-694BF6B4EC78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{713E563C-C8E0-488D-9F16-694BF6B4EC78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{713E563C-C8E0-488D-9F16-694BF6B4EC78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,6 +47,7 @@ Global
 		{76804532-876B-4B53-A094-F1D3CE31EF5A} = {D3B68EA9-EA80-4CCC-ACF7-A6D8D8FFFAB5}
 		{2CA0519A-C764-4B07-A28E-74C336795FA0} = {D3B68EA9-EA80-4CCC-ACF7-A6D8D8FFFAB5}
 		{D1D05B13-72FD-40B9-AB0C-C7143CC16ADA} = {5C8A9291-E7EB-44DC-A6CC-0A41AEC59469}
+		{713E563C-C8E0-488D-9F16-694BF6B4EC78} = {8B1E4308-26C6-41B4-9155-3E9E256B7BA4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {092F5710-D897-4AE8-A0CE-AFED470054F8}
