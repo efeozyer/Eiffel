@@ -11,11 +11,11 @@ using Xunit;
 
 namespace Eiffel.Messaging.Tests
 {
-    public class MessageDispatcher_Unit_Tests
+    public class Mediator_Unit_Tests
     {
         private readonly IServiceCollection _services;
 
-        public MessageDispatcher_Unit_Tests()
+        public Mediator_Unit_Tests()
         {
             _services = new ServiceCollection();
             _services.AddSingleton<IMediator, Mediator>(serviceProvider =>
