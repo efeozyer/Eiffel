@@ -45,7 +45,7 @@ namespace Eiffel.Persistence.MongoDB
             var collectionConfig = (dynamic)serviceProvider.GetService(configType);
             if (collectionConfig == null)
             {
-                throw new CollectionBindingException($"{property.Name} CollectionTypeConfiguration could not be found.");
+                throw new CollectionBindingException($"{property.Name} ICollectionTypeConfiguration could not be found.");
             }
             return collectionConfig;
         }
