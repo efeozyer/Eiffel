@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Eiffel.Persistence.MongoDB.Tests.Mocks
+namespace Eiffel.Persistence.MongoDB.Tests
 {
     public class MockUserCollection
     {

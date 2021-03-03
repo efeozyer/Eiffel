@@ -1,7 +1,7 @@
 ﻿using MongoDB.Driver;
 using Moq;
 
-namespace Eiffel.Persistence.MongoDB.Builders
+namespace Eiffel.Persistence.MongoDB.Tests
 {
     public class MockDatabaseBuilder<TDocument>
     {

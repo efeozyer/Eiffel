@@ -6,7 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 
-namespace Eiffel.Persistence.MongoDB.Builders
+namespace Eiffel.Persistence.MongoDB.Tests
 {
     public class MockCollectionBuilder<TDocument>
         where TDocument : class
