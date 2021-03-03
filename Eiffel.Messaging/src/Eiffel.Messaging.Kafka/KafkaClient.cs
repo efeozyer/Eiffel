@@ -27,7 +27,7 @@ namespace Eiffel.Messaging.Kafka
             _tokenSource = new CancellationTokenSource();
         }
 
-        public virtual async Task ConsumeAsync<TMessage>(string topicName, Action<TMessage> dispatcher, CancellationToken cancellationToken)
+        public virtual async Task ConsumeAsync<TMessage>(string topicName, Action<TMessage> dispatcher, CancellationToken cancellationToken = default)
             where TMessage : class, new()
         {
             await Task.Factory.StartNew(() =>
@@ -70,28 +70,46 @@ namespace Eiffel.Messaging.Kafka
             {
                 while (true)
                 {
-                    if (_tokenSource.IsCancellationRequested) {
+                    if (_tokenSource.IsCancellationRequested)
+                    {
                         throw new ConsumeCancelledByUserException();
                     }
 
-                    var result = _consumer.Consume();
-                    if (result?.Message?.Value?.Length > 0)
+                    try
                     {
-                        var msg = BinaryConverter.Deserialize<TMessage>(result.Message.Value);
-                        dispatcher.Invoke(msg);
-                        _consumer.Commit();
+                        var result = _consumer.Consume();
+                        if (result?.Message?.Value?.Length > 0)
+                        {
+                            var msg = BinaryConverter.Deserialize<TMessage>(result.Message.Value);
+                            dispatcher.Invoke(msg);
+                        }
+
+                        if (!(_config.ConsumerConfig.EnableAutoCommit ?? false))
+                        {
+                            _consumer.Commit(result);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "An error occourd KafkaClient consumer");
                     }
                 }
             });
         }
 
-        public virtual async Task ProduceAsync<TMessage>(string topicName, TMessage message, CancellationToken cancellationToken)
+        public virtual async Task ProduceAsync<TMessage>(string topicName, TMessage message, CancellationToken cancellationToken = default)
             where TMessage : class, new()
         {
-            _ = await _producer.ProduceAsync(topicName, new Message<Null, byte[]>
+            var deliveryResult = await _producer.ProduceAsync(topicName, new Message<Null, byte[]>
             {
-                Value = BinaryConverter.Serialize(message)
+                Value = BinaryConverter.Serialize(message),
+                Timestamp = new Timestamp(DateTime.UtcNow)
             }, cancellationToken);
+
+            if (deliveryResult.Status == PersistenceStatus.NotPersisted)
+            {
+                throw new ProduceFailedException($"Message cannot be devlivered to broker {topicName}");
+            }
         }
 
         public virtual void Produce<TMessage>(string topicName, TMessage message)
@@ -101,6 +119,12 @@ namespace Eiffel.Messaging.Kafka
             {
                 Value = BinaryConverter.Serialize(message),
                 Timestamp = new Timestamp(DateTime.UtcNow)
+            }, (deliveryReport) =>
+            {
+                if (deliveryReport.Status == PersistenceStatus.NotPersisted)
+                {
+                    throw new ProduceFailedException($"Message cannot be devlivered to broker {topicName}");
+                }
             });
         }
 
