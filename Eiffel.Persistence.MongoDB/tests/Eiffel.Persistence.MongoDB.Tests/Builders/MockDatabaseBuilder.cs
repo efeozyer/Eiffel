@@ -7,6 +7,7 @@ using System.Threading;
 namespace Eiffel.Persistence.MongoDB.Tests
 {
     public class MockDatabaseBuilder<TDocument>
+        where TDocument : class
     {
         private readonly Mock<IMongoDatabase> _database;
         private readonly IMongoCollection<TDocument> _collection;
@@ -17,7 +18,7 @@ namespace Eiffel.Persistence.MongoDB.Tests
             _collection = collection;
         }
 
-        public MockDatabaseBuilder<TDocument> WithCollections(string[] collectionNames)
+        public MockDatabaseBuilder<TDocument> WithCollectionNames(string[] collectionNames)
         {
             _database.Setup(x => x.ListCollections(It.IsAny<ListCollectionsOptions>(), It.IsAny<CancellationToken>())).Returns(() =>
             {
