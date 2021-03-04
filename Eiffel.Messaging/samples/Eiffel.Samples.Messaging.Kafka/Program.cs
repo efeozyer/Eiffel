@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Eiffel.Messaging.Core;
+using Eiffel.Messaging;
 using Eiffel.Messaging.Kafka;
 using Eiffel.Messaging.Abstractions;
 using Eiffel.Samples.Messaging.Kafka.Middlewares;

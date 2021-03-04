@@ -24,10 +24,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Eiffel.Messaging.Abstractions\Eiffel.Messaging.Abstractions.csproj" />
-    <ProjectReference Include="..\..\src\Eiffel.Messaging.Core\Eiffel.Messaging.Core.csproj" />
     <ProjectReference Include="..\..\src\Eiffel.Messaging.Extensions\Eiffel.Messaging.Extensions.csproj" />
     <ProjectReference Include="..\..\src\Eiffel.Messaging.InMemory\Eiffel.Messaging.InMemory.csproj" />
     <ProjectReference Include="..\..\src\Eiffel.Messaging.Kafka\Eiffel.Messaging.Kafka.csproj" />
+    <ProjectReference Include="..\..\src\Eiffel.Messaging\Eiffel.Messaging.csproj" />
   </ItemGroup>
 
 </Project>

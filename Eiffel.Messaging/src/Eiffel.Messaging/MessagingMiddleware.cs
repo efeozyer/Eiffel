@@ -5,7 +5,7 @@ using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Eiffel.Messaging.Core
+namespace Eiffel.Messaging
 {
     internal class MessagingMiddleware
     {

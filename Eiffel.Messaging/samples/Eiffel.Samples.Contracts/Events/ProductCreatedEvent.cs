@@ -1,5 +1,5 @@
 ﻿using Eiffel.Messaging.Abstractions;
-using Eiffel.Messaging.Core.Attributes;
+using Eiffel.Messaging.Attributes;
 
 namespace Eiffel.Samples.Contracts.Events
 {

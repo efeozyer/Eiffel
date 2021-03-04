@@ -34,7 +34,7 @@ namespace Eiffel.Messaging.Tests
             mockClient.Setup(x => x.ProduceAsync(It.IsAny<string>(), It.IsAny<MockEvent>(), It.IsAny<CancellationToken>()));
 
             var mockMediator = new Mock<IMediator>();
-            var eventBus = new Core.EventBus(mockClient.Object, mockMediator.Object);
+            var eventBus = new EventBus(mockClient.Object, mockMediator.Object);
 
             // Act
             eventBus.Publish(mockEvent);
@@ -55,7 +55,7 @@ namespace Eiffel.Messaging.Tests
             mockClient.Setup(x => x.ConsumeAsync(It.IsAny<string>(), It.IsAny<Action<MockEvent>>(), It.IsAny<CancellationToken>()));
 
             var mockMediator = new Mock<IMediator>();
-            var eventBus = new Core.EventBus(mockClient.Object, mockMediator.Object);
+            var eventBus = new EventBus(mockClient.Object, mockMediator.Object);
 
             // Act
             eventBus.Subscribe<MockEvent>();
@@ -80,7 +80,7 @@ namespace Eiffel.Messaging.Tests
             mockClient.Setup(x => x.ProduceAsync(It.IsAny<string>(), It.IsAny<MockEvent>(), It.IsAny<CancellationToken>()));
 
             var mockMediator = new Mock<IMediator>();
-            var eventBus = new Core.EventBus(mockClient.Object, mockMediator.Object);
+            var eventBus = new EventBus(mockClient.Object, mockMediator.Object);
 
             // Act
             eventBus.Publish(mockEvent);
@@ -104,7 +104,7 @@ namespace Eiffel.Messaging.Tests
             mockClient.Setup(x => x.ConsumeAsync(It.IsAny<string>(), It.IsAny<Action<MockEvent>>(), It.IsAny<CancellationToken>()));
 
             var mockMediator = new Mock<IMediator>();
-            var eventBus = new Core.EventBus(mockClient.Object, mockMediator.Object);
+            var eventBus = new EventBus(mockClient.Object, mockMediator.Object);
 
             // Act
             eventBus.Subscribe<MockEvent>();
@@ -123,7 +123,7 @@ namespace Eiffel.Messaging.Tests
             mockClient.Setup(x => x.Unsubscribe());
 
             var mockMediator = new Mock<IMediator>();
-            var eventBus = new Core.EventBus(mockClient.Object, mockMediator.Object);
+            var eventBus = new EventBus(mockClient.Object, mockMediator.Object);
 
             // Act
             eventBus.Unsubscribe();

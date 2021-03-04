@@ -1,12 +1,12 @@
 ﻿using Eiffel.Messaging.Abstractions;
-using Eiffel.Messaging.Core.Exceptions;
+using Eiffel.Messaging.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Eiffel.Messaging.Core
+namespace Eiffel.Messaging
 {
     public class Mediator : IMediator
     {

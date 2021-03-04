@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Eiffel.Messaging.Core
+namespace Eiffel.Messaging
 {
     public class MessagingMiddlewareOptions
     {

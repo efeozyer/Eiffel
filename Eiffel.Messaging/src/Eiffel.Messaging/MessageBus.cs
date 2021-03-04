@@ -1,10 +1,10 @@
 ﻿using Eiffel.Messaging.Abstractions;
-using Eiffel.Messaging.Core.Attributes;
+using Eiffel.Messaging.Attributes;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Eiffel.Messaging.Core
+namespace Eiffel.Messaging
 {
     public class MessageBus : IMessageBus
     {

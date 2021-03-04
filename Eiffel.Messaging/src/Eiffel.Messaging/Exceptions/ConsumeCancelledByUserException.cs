@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Eiffel.Messaging.Core.Exceptions
+namespace Eiffel.Messaging.Exceptions
 {
     public class ConsumeCancelledByUserException : Exception
     {

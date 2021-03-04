@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Eiffel.Messaging.Core.Attributes
+namespace Eiffel.Messaging.Attributes
 {
     public class TopicNameAttribute : Attribute
     {

@@ -1,6 +1,6 @@
 ﻿using Eiffel.Messaging.Abstractions;
-using Eiffel.Messaging.Core;
-using Eiffel.Messaging.Core.Exceptions;
+using Eiffel.Messaging;
+using Eiffel.Messaging.Exceptions;
 using Eiffel.Messaging.Tests.Mocks.Events;
 using Eiffel.Messaging.Tests.Mocks.Handlers;
 using Eiffel.Messaging.Tests.Mocks.Messages;

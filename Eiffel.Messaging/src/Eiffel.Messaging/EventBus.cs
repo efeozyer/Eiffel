@@ -2,9 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Eiffel.Messaging.Abstractions;
-using Eiffel.Messaging.Core.Attributes;
+using Eiffel.Messaging.Attributes;
 
-namespace Eiffel.Messaging.Core
+namespace Eiffel.Messaging
 {
     public class EventBus : IEventBus
     {

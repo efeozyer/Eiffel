@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 
-namespace Eiffel.Messaging.Core
+namespace Eiffel.Messaging
 {
     public static class ServiceCollectionExtensions
     {

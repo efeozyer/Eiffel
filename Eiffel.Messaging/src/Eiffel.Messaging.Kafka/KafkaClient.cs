@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using BinaryPack;
 using Confluent.Kafka;
 using Eiffel.Messaging.Abstractions;
-using Eiffel.Messaging.Core.Exceptions;
+using Eiffel.Messaging.Exceptions;
 using Microsoft.Extensions.Logging;
 
 namespace Eiffel.Messaging.Kafka
