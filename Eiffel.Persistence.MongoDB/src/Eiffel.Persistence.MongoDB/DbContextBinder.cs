@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 
 namespace Eiffel.Persistence.MongoDB
 {
@@ -22,7 +21,7 @@ namespace Eiffel.Persistence.MongoDB
                     context.Database.CreateCollection(metadata.CollectionName, metadata.CollectionOptions);
                 }
 
-                var collection = GetCollection(context, metadata.CollectionName, property.PropertyType, metadata.ColletionSettings);
+                var collection = GenericMethodProxy<TContext>.GetCollection(context, metadata.CollectionName, property.PropertyType, metadata.ColletionSettings);
                 if (metadata?.IndexKeys?.Count > 0)
                 {
                     EnsureIndexes(property.PropertyType, collection, metadata.IndexKeys);
@@ -31,7 +30,7 @@ namespace Eiffel.Persistence.MongoDB
                 var contextCollection = CreateCollection(property.PropertyType, collection, metadata.FilterExpression);
                 if (metadata.Documents?.Count > 0)
                 {
-                    SeedCollection(contextCollection, metadata.Documents);
+                    GenericMethodProxy<TContext>.SeedCollection(contextCollection, metadata.Documents);
                 }
 
                 property.SetValue(context, contextCollection);
@@ -42,7 +41,7 @@ namespace Eiffel.Persistence.MongoDB
         {
             foreach(var indexKey in indexKeys)
             {
-                CreateIndex(collectionType, collection, indexKey);
+                GenericMethodProxy<TContext>.CreateIndex(collectionType, collection, indexKey);
             }
         }
 
@@ -83,32 +82,6 @@ namespace Eiffel.Persistence.MongoDB
         {
             var instanceType = typeof(Collection<>).MakeGenericType(collectionType.GetGenericArguments()[0]);
             return Activator.CreateInstance(instanceType, new[] { collection, filterExpression });
-        }
-
-        //
-        // TODO: Move proxy methods to antoher class
-        //
-        private static dynamic GetCollection(TContext context, string collectionName, Type collectionType, MongoCollectionSettings collectionSettings = null)
-        {
-            var genericMethod = context.Database.GetType().GetMethod("GetCollection")
-                .MakeGenericMethod(collectionType.GetGenericArguments()[0]);
-
-            return (dynamic)genericMethod.Invoke(context.Database, new object[] { collectionName, collectionSettings });
-        }
-
-        private static void CreateIndex(Type collectionType, dynamic collection, dynamic indexDefinition)
-        {
-            var instanceType = typeof(CreateIndexModel<>).MakeGenericType(collectionType.GetGenericArguments()[0]);
-            var instance = Activator.CreateInstance(instanceType, new[] { indexDefinition, null });
-
-            var createIndexMethod = collection.Indexes.GetType().GetMethod("CreateOne", new[] { instanceType, typeof(CreateOneIndexOptions), typeof(CancellationToken) });
-            createIndexMethod.Invoke(collection.Indexes, new[] { instance, null, default });
-        }
-
-        private static void SeedCollection(dynamic collection, dynamic documents)
-        {
-            var genericMethod = collection.GetType().GetMethod("AddRange");
-            genericMethod.Invoke(collection, new[] { documents });
         }
     }
 }
