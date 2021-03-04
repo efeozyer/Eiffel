@@ -1,22 +1,19 @@
 ﻿using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 
 namespace Eiffel.Persistence.MongoDB.Abstractions
 {
-    public interface ICollectionTypeMetadata<TCollection>
-        where TCollection : class
+    public interface ICollectionTypeMetadata
     {
         string CollectionName { get; }
-        IEnumerable<TCollection> Data { get; }
-        Expression<Func<TCollection, bool>> FilterExpression { get; }
+        dynamic Documents { get; }
+        dynamic IndexKeys { get; }
+        dynamic FilterExpression { get; }
         DocumentValidationAction ValidationAction { get; }
         DocumentValidationLevel ValidationLevel { get; }
         bool? IsCapped { get; }
         long? MaxSize { get; }
         long? MaxDocuments { get; }
-        CreateCollectionOptions<TCollection> CollectionOptions { get; }
+        CreateCollectionOptions<object> CollectionOptions { get; }
         MongoCollectionSettings ColletionSettings { get; }
     }
 }

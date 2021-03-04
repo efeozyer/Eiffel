@@ -13,7 +13,7 @@ namespace Eiffel.Persistence.MongoDB.Abstractions
         ICollectionTypeBuilder<TCollection> ToCollection(string name);
         ICollectionTypeBuilder<TCollection> HasQueryFilter(Expression<Func<TCollection, bool>> expression);
         ICollectionTypeBuilder<TCollection> HasIndex(Expression<Func<TCollection, object>> expression, bool isAscending = true);
-        ICollectionTypeBuilder<TCollection> HasData(IEnumerable<TCollection> data);
+        ICollectionTypeBuilder<TCollection> HasDocuments(IEnumerable<TCollection> documents);
         ICollectionTypeBuilder<TCollection> IsRequired(Expression<Func<TCollection, object>> expression, bool isRequired = true);
         ICollectionTypeBuilder<TCollection> Type(Expression<Func<TCollection, object>> expression, BsonType valueType);
         ICollectionTypeBuilder<TCollection> ValidationLevel(DocumentValidationLevel validationLevel);
@@ -29,6 +29,6 @@ namespace Eiffel.Persistence.MongoDB.Abstractions
         ICollectionTypeBuilder<TCollection> ReadPreference(ReadPreference readPreference);
         ICollectionTypeBuilder<TCollection> WriteConcern(WriteConcern writeConcern);
         ICollectionTypeBuilder<TCollection> WriteEncoding(UTF8Encoding writeEnconding);
-        ICollectionTypeMetadata<TCollection> Build();
+        ICollectionTypeMetadata Build();
     }
 }

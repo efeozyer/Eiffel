@@ -3,6 +3,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
@@ -11,13 +12,13 @@ namespace Eiffel.Persistence.MongoDB
     public class CollectionTypeBuilder<TCollection> : ICollectionTypeBuilder<TCollection>
         where TCollection : class
     {
-        private readonly CollectionTypeMetadata<TCollection> _metadata;
+        private readonly CollectionTypeMetadata _metadata;
         private readonly List<FilterDefinition<TCollection>> _validationRules;
         private readonly List<IndexKeysDefinition<TCollection>> _indexKeys;
 
         public CollectionTypeBuilder()
         {
-            _metadata = new CollectionTypeMetadata<TCollection>();
+            _metadata = new CollectionTypeMetadata();
             _validationRules = new List<FilterDefinition<TCollection>>();
             _indexKeys = new List<IndexKeysDefinition<TCollection>>();
         }
@@ -30,7 +31,7 @@ namespace Eiffel.Persistence.MongoDB
 
         public ICollectionTypeBuilder<TCollection> HasQueryFilter(Expression<Func<TCollection, bool>> expression)
         {
-            _metadata.FilterExpression = _metadata.FilterExpression == null ? expression : _metadata.FilterExpression.CombineWith(expression);
+            _metadata.FilterExpression = _metadata.FilterExpression == null ? (dynamic)expression : _metadata.FilterExpression.CombineWith(expression);
             return this;
         }
 
@@ -48,9 +49,9 @@ namespace Eiffel.Persistence.MongoDB
             return this;
         }
 
-        public ICollectionTypeBuilder<TCollection> HasData(IEnumerable<TCollection> data)
+        public ICollectionTypeBuilder<TCollection> HasDocuments(IEnumerable<TCollection> documents)
         {
-            _metadata.Data = data;
+            _metadata.Documents = documents;
             return this;
         }
 
@@ -147,8 +148,13 @@ namespace Eiffel.Persistence.MongoDB
         }
 
         // TODO : Create index options
-        public ICollectionTypeMetadata<TCollection> Build()
+        public ICollectionTypeMetadata Build()
         {
+            if (_indexKeys?.Count > 0)
+            {
+                _metadata.IndexKeys = _indexKeys;
+            }
+
             if (_metadata.IsCapped.HasValue && _metadata.IsCapped.Value)
             {
                 _metadata.CollectionOptions.MaxDocuments = _metadata.MaxDocuments;
@@ -157,7 +163,7 @@ namespace Eiffel.Persistence.MongoDB
 
             if (_validationRules?.Count > 0)
             {
-                _metadata.CollectionOptions.Validator = new FilterDefinitionBuilder<TCollection>().And(_validationRules);
+                _metadata.CollectionOptions.Validator = new FilterDefinitionBuilder<object>().And((List<FilterDefinition<object>>)_validationRules.Select(x => (dynamic)x));
                 _metadata.CollectionOptions.ValidationAction = _metadata.ValidationAction;
                 _metadata.CollectionOptions.ValidationLevel = _metadata.ValidationLevel;
             }

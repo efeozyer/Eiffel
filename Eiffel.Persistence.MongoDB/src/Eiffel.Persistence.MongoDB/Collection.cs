@@ -14,10 +14,12 @@ namespace Eiffel.Persistence.MongoDB
         where TDocument : class
     {
         private readonly IMongoCollection<TDocument> _collection;
+        private readonly Expression<Func<TDocument, bool>> _filterExpression;
 
-        public Collection(IMongoCollection<TDocument> collection)
+        public Collection(IMongoCollection<TDocument> collection, Expression<Func<TDocument, bool>> filterExpression)
         {
             _collection = collection;
+            _filterExpression = filterExpression;
         }
 
         public virtual IAsyncEnumerable<TDocument> AsAsyncEnumerable()
@@ -62,6 +64,15 @@ namespace Eiffel.Persistence.MongoDB
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public IAsyncCursor<TDocument> Find(Expression<Func<TDocument, bool>> expression)
+        {
+            if (_filterExpression != null)
+            {
+                return _collection.FindSync(expression.CombineWith(_filterExpression), null, default);
+            }
+            return _collection.FindSync(expression, null, default);
         }
 
         public void Add(TDocument document)
@@ -287,6 +298,14 @@ namespace Eiffel.Persistence.MongoDB
         public Task<IAsyncCursor<TProjection>> FindAsync<TProjection>(IClientSessionHandle session, FilterDefinition<TDocument> filter, FindOptions<TDocument, TProjection> options = null, CancellationToken cancellationToken = default)
         {
             return _collection.FindAsync(session, filter, options, cancellationToken);
+        }
+        public Task<IAsyncCursor<TDocument>> FindAsync(Expression<Func<TDocument, bool>> expression, CancellationToken cancellationToken = default)
+        {
+            if (_filterExpression != null)
+            {
+                return _collection.FindAsync(expression.CombineWith(_filterExpression), null, default);
+            }
+            return _collection.FindAsync(expression, null, cancellationToken);
         }
 
         public Task<IAsyncCursor<TProjection>> FindAsync<TProjection>(FilterDefinition<TDocument> filter, FindOptions<TDocument, TProjection> options = null, CancellationToken cancellationToken = default)
