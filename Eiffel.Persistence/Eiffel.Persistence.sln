@@ -7,13 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eiffel.Persistence.Abstract
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E0C68D55-5412-4F6D-BDB1-D4889300ED18}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eiffel.Persistence.Core", "src\Eiffel.Persistence.Core\Eiffel.Persistence.Core.csproj", "{999CC291-BDC7-494A-90CF-1D372E227888}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{2DEF0581-EB34-469F-AB74-624F7478BC30}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0DDC52B8-FCA5-46CC-B91A-FCB9217AA9A7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eiffel.Persistence.Tests", "tests\Eiffel.Persistence.Tests\Eiffel.Persistence.Tests.csproj", "{E631A1C9-EEBF-4C56-9F94-E7BFE84D495F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eiffel.Persistence", "src\Eiffel.Persistence\Eiffel.Persistence.csproj", "{5297521D-90D1-48B2-BA50-6AFCD3352BD4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,22 +25,22 @@ Global
 		{FC0B9040-1D13-41A6-93C4-28AAD453AE6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC0B9040-1D13-41A6-93C4-28AAD453AE6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC0B9040-1D13-41A6-93C4-28AAD453AE6F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{999CC291-BDC7-494A-90CF-1D372E227888}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{999CC291-BDC7-494A-90CF-1D372E227888}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{999CC291-BDC7-494A-90CF-1D372E227888}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{999CC291-BDC7-494A-90CF-1D372E227888}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E631A1C9-EEBF-4C56-9F94-E7BFE84D495F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E631A1C9-EEBF-4C56-9F94-E7BFE84D495F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E631A1C9-EEBF-4C56-9F94-E7BFE84D495F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E631A1C9-EEBF-4C56-9F94-E7BFE84D495F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5297521D-90D1-48B2-BA50-6AFCD3352BD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5297521D-90D1-48B2-BA50-6AFCD3352BD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5297521D-90D1-48B2-BA50-6AFCD3352BD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5297521D-90D1-48B2-BA50-6AFCD3352BD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FC0B9040-1D13-41A6-93C4-28AAD453AE6F} = {E0C68D55-5412-4F6D-BDB1-D4889300ED18}
-		{999CC291-BDC7-494A-90CF-1D372E227888} = {E0C68D55-5412-4F6D-BDB1-D4889300ED18}
 		{E631A1C9-EEBF-4C56-9F94-E7BFE84D495F} = {0DDC52B8-FCA5-46CC-B91A-FCB9217AA9A7}
+		{5297521D-90D1-48B2-BA50-6AFCD3352BD4} = {E0C68D55-5412-4F6D-BDB1-D4889300ED18}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6F0EA3B3-7216-411B-A9A3-623766658FC5}
