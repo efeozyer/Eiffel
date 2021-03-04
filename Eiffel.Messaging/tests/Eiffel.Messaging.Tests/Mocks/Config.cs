@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 
-namespace Eiffel.Messaging.MessageBus.Tests.Mocks
+namespace Eiffel.Messaging.Tests.Mocks
 {
     public static class Config
     {

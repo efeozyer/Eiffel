@@ -1,5 +1,6 @@
 ﻿using Eiffel.Messaging.Abstractions;
 using Eiffel.Messaging.Core;
+using Eiffel.Messaging.Tests.Mocks.Events;
 using Eiffel.Messaging.Tests.Mocks.Messages;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,8 +1,9 @@
 ﻿using Eiffel.Messaging.Abstractions;
-using Eiffel.Messaging.EventBus.Tests.Mocks.Events;
 using Eiffel.Messaging.Extensions;
 using Eiffel.Messaging.InMemory;
 using Eiffel.Messaging.Kafka;
+using Eiffel.Messaging.Tests.Mocks;
+using Eiffel.Messaging.Tests.Mocks.Events;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -11,7 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Eiffel.Messaging.EventBus.Tests
+namespace Eiffel.Messaging.Tests
 {
     public class EventBus_Unit_Tests
     {
@@ -19,7 +20,7 @@ namespace Eiffel.Messaging.EventBus.Tests
 
         public EventBus_Unit_Tests()
         {
-            _configuration = Mocks.Config.RootConfig();
+            _configuration = Config.RootConfig();
         }
 
         [Fact]

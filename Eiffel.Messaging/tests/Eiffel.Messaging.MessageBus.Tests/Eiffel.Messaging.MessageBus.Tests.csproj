@@ -28,8 +28,4 @@
 		<ProjectReference Include="..\..\src\Eiffel.Messaging.Kafka\Eiffel.Messaging.Kafka.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Mocks\Handlers\" />
-	</ItemGroup>
-
 </Project>

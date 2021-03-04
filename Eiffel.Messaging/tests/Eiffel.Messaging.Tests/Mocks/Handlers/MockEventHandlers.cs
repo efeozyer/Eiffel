@@ -1,5 +1,5 @@
 ﻿using Eiffel.Messaging.Abstractions;
-using Eiffel.Messaging.Tests.Mocks.Messages;
+using Eiffel.Messaging.Tests.Mocks.Events;
 using System.Threading;
 using System.Threading.Tasks;
 

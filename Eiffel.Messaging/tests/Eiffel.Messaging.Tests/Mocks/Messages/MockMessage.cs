@@ -1,7 +1,7 @@
 ﻿using Eiffel.Messaging.Abstractions;
 using Eiffel.Messaging.Core.Attributes;
 
-namespace Eiffel.Messaging.MessageBus.Tests.Mocks.Messages
+namespace Eiffel.Messaging.Tests.Mocks.Messages
 {
     [TopicName("test-topic")]
     public class MockMessage : IMessage
