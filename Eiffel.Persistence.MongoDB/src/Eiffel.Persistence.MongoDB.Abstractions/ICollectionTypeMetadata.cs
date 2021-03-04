@@ -8,12 +8,12 @@ namespace Eiffel.Persistence.MongoDB.Abstractions
         dynamic Documents { get; }
         dynamic IndexKeys { get; }
         dynamic FilterExpression { get; }
-        DocumentValidationAction ValidationAction { get; }
-        DocumentValidationLevel ValidationLevel { get; }
+        DocumentValidationAction? ValidationAction { get; }
+        DocumentValidationLevel? ValidationLevel { get; }
         bool? IsCapped { get; }
         long? MaxSize { get; }
         long? MaxDocuments { get; }
-        CreateCollectionOptions<object> CollectionOptions { get; }
+        dynamic CollectionOptions { get; }
         MongoCollectionSettings ColletionSettings { get; }
     }
 }

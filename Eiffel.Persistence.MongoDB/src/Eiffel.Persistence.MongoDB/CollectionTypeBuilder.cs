@@ -150,6 +150,7 @@ namespace Eiffel.Persistence.MongoDB
         // TODO : Create index options
         public ICollectionTypeMetadata Build()
         {
+            _metadata.CollectionOptions = new CreateCollectionOptions<TCollection>();
             if (_indexKeys?.Count > 0)
             {
                 _metadata.IndexKeys = _indexKeys;
@@ -163,9 +164,9 @@ namespace Eiffel.Persistence.MongoDB
 
             if (_validationRules?.Count > 0)
             {
-                _metadata.CollectionOptions.Validator = new FilterDefinitionBuilder<object>().And((List<FilterDefinition<object>>)_validationRules.Select(x => (dynamic)x));
-                _metadata.CollectionOptions.ValidationAction = _metadata.ValidationAction;
-                _metadata.CollectionOptions.ValidationLevel = _metadata.ValidationLevel;
+                _metadata.CollectionOptions.Validator =  new FilterDefinitionBuilder<TCollection>().And(_validationRules.Select(x => x));
+                _metadata.CollectionOptions.ValidationAction = _metadata.ValidationAction ?? _metadata.CollectionOptions.ValidationAction;
+                _metadata.CollectionOptions.ValidationLevel = _metadata.ValidationLevel ?? _metadata.CollectionOptions.ValidationLevel;
             }
 
             return _metadata;

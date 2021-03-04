@@ -173,46 +173,6 @@ namespace Eiffel.Persistence.MongoDB.Tests
             users.Count.Should().Be(documents.Count);
         }
 
-        [Fact]
-        public void ContextTypeBuilder_Should_Set_ValidationRules()
-        {
-            // Arrange
-            var collectionBuilder = new MockCollectionBuilder<User>();
-            var mockCollection = collectionBuilder
-                .WithEmptyCollection()
-                .WithCreate()
-                .Build();
-
-            var mockDatabase = new MockDatabaseBuilder<User>(mockCollection.Object)
-               .WithCollectionNames(new string[0])
-               .Build();
-
-            var mockClient = new MockClientBuilder(mockDatabase.Object).Build();
-            var mockOptions = new Mock<DbContextOptions<UserDbContext>>(new MongoClientSettings()) { CallBase = true };
-            var mockContext = new Mock<UserDbContext>(new[] { mockOptions.Object }) { CallBase = true };
-
-            mockContext.SetupGet(x => x.Database).Returns(mockDatabase.Object);
-            mockContext.SetupGet(x => x.Client).Returns(mockClient.Object);
-
-            var mockConfig = new Mock<UserCollectionTypeConfiguration>() { CallBase = true };
-            mockConfig.Setup(x => x.Configure(It.IsAny<ICollectionTypeBuilder<User>>()))
-                .Callback((ICollectionTypeBuilder<User> builder) =>
-                {
-                    builder.IsRequired(x => x.Name);
-                });
-
-            _services.AddSingleton<ICollectionTypeConfiguration<User>>(mockConfig.Object);
-            _services.AddSingleton(mockContext.Object);
-            var serviceProvider = _services.BuildServiceProvider();
-            DbContextBinder<UserDbContext>.Bind(mockContext.Object, serviceProvider);
-
-            // Act
-            mockContext.Object.Users.Add(new User());
-
-            // Assert
-            mockCollection.Verify(x => x.InsertOne(It.IsAny<User>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()), Times.Once);
-        }
-
         private void CreateMockObjects<TDocument, TContext>(
             ref Mock<IMongoCollection<TDocument>> mockCollection, 
             ref Mock<IMongoDatabase> mockDatabase,
