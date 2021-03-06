@@ -1,0 +1,38 @@
+name: .NET
+
+on:
+  push:
+    branches: [ main ]
+    
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: main
+        
+    - name: Get mainSHA
+      id: mainSHA
+      run: echo "::set-output name=mainSHA::$(git rev-parse HEAD)"
+
+    - uses: actions/checkout@v2
+      with: 
+        ref: ${{ github.ref }}
+     
+    - name: Restore
+      run: .\build\restore.ps1 -commitSHA ${{ github.sha }} -mainSHA ${{ steps.mainSHA.outputs.mainSHA }}
+      shell: powershell
+      
+    - name: Build
+      run: .\build\build.ps1 -commitSHA ${{ github.sha }} -mainSHA ${{ steps.mainSHA.outputs.mainSHA }}
+      shell: powershell
+      
+    - name: Test
+      run: .\build\test.ps1 -commitSHA ${{ github.sha }} -mainSHA ${{ steps.mainSHA.outputs.mainSHA }}
+      shell: powershell
+      
+    - name: Version
+      run: .\build\version.ps1 -commitSHA ${{ github.sha }} -mainSHA ${{ steps.mainSHA.outputs.mainSHA }} -isRelease 0
+      shell: powershell
