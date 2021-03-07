@@ -15,7 +15,7 @@ jobs:
         
     - name: Get mainSHA
       id: mainSHA
-      run: echo "::set-output name=mainSHA::$(git rev-parse HEAD^)"
+      run: echo "::set-output name=mainSHA::$(git rev-parse HEAD)"
 
     - uses: actions/checkout@v2
       with: 
