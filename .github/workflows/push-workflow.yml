@@ -22,7 +22,7 @@ jobs:
         ref: ${{ github.ref }}
      
     - name: Restore
-      run: .\build\restore.ps1 -commitSHA ${{ github.sha }} -mainSHA ${{ steps.mainSHA.outputs.mainSHA }}
+      run: .\.build\restore.ps1 -commitSHA ${{ github.sha }} -mainSHA ${{ steps.mainSHA.outputs.mainSHA }}
       shell: powershell
       
     - name: Build
@@ -30,9 +30,9 @@ jobs:
       shell: powershell
       
     - name: Test
-      run: .\build\test.ps1 -commitSHA ${{ github.sha }} -mainSHA ${{ steps.mainSHA.outputs.mainSHA }}
+      run: .\.build\test.ps1 -commitSHA ${{ github.sha }} -mainSHA ${{ steps.mainSHA.outputs.mainSHA }}
       shell: powershell
       
     - name: Version
-      run: .\build\version.ps1 -commitSHA ${{ github.sha }} -mainSHA ${{ steps.mainSHA.outputs.mainSHA }} -isRelease 0
+      run: .\.build\version.ps1 -commitSHA ${{ github.sha }} -mainSHA ${{ steps.mainSHA.outputs.mainSHA }} -isRelease 0
       shell: powershell
