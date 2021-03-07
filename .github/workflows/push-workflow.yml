@@ -12,14 +12,11 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: main
+        fetch-depth: 0
         
     - name: Get mainSHA
       id: mainSHA
-      run: echo "::set-output name=mainSHA::$(git rev-parse HEAD)"
-
-    - uses: actions/checkout@v2
-      with: 
-        ref: ${{ github.ref }}
+      run: echo "::set-output name=mainSHA::$(git rev-parse HEAD~1)"
      
     - name: Restore
       run: .\.build\restore.ps1 -commitSHA ${{ github.sha }} -mainSHA ${{ steps.mainSHA.outputs.mainSHA }}
