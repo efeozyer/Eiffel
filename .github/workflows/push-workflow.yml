@@ -26,7 +26,7 @@ jobs:
       shell: powershell
       
     - name: Build
-      run: .\build\build.ps1 -commitSHA ${{ github.sha }} -mainSHA ${{ steps.mainSHA.outputs.mainSHA }}
+      run: .\.build\build.ps1 -commitSHA ${{ github.sha }} -mainSHA ${{ steps.mainSHA.outputs.mainSHA }}
       shell: powershell
       
     - name: Test
