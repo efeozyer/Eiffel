@@ -4,14 +4,14 @@
     $commitSHA,
     [Parameter(Mandatory = $true)]
     [string]
-    $mainSHA
+    $prevSHA
 )
 
 foreach ($rootDir in Get-ChildItem -Directory -Path . -Filter 'Eiffel.*')
 {
     foreach ($subDir in Get-ChildItem -Path "$($rootDir.Name)\src\**\") 
     {
-        $files = (& git diff $mainSHA $commitSHA --name-only $subDir.FullName "$($rootDir.Name).*")
+        $files = (& git diff $prevSHA $commitSHA --name-only $subDir.FullName "$($subDir.FullName)")
         if ($files.Count -gt 0) 
         {
             $csprojFile = "$($subDir.FullName)\$($subDir.Name).csproj"

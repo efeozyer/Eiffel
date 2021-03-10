@@ -4,22 +4,20 @@
     $commitSHA,
     [Parameter(Mandatory = $true)]
     [string]
-    $mainSHA
+    $prevSHA
 )
 
 foreach ($rootDir in Get-ChildItem -Directory -Path . -Filter 'Eiffel.*')
 {
-    foreach ($subDir in Get-ChildItem -Path "$($rootDir.Name)\src\**\") 
+    $files = (& git diff $prevSHA $commitSHA --name-only $rootDir.FullName "$($rootDir.FullName)")
+    if ($files.Count -gt 0) 
     {
-        $files = (& git diff $mainSHA $commitSHA --name-only $subDir.FullName "$($rootDir.Name).*")
-        if ($files.Count -gt 0) 
+        Write-Host $rootDir.FullName
+        Write-Host "Tests runing $($rootDir.Name)"
+        dotnet test $rootDir.FullName
+        if (-Not($?)) 
         {
-            Write-Host "Tests runing $($subDir.Name)"
-            dotnet test $rootDir.FullName
-            if (-Not($?)) 
-            {
-                throw "Tests failed!"
-            }
+            throw "Tests failed!"
         }
     }
 }

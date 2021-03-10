@@ -1,4 +1,4 @@
-name: .NET
+name: Eiffel.Framework.OnPush
 
 on:
   push:
@@ -11,25 +11,24 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        ref: main
         fetch-depth: 0
         
-    - name: Get mainSHA
-      id: mainSHA
-      run: echo "::set-output name=mainSHA::$(git rev-parse HEAD~1)"
+    - name: Get previous commit SHA
+      id: git
+      run: echo "::set-output name=prev_sha::$(git rev-parse HEAD~1)"
      
     - name: Restore
-      run: .\.build\restore.ps1 -commitSHA ${{ github.sha }} -mainSHA ${{ steps.mainSHA.outputs.mainSHA }}
+      run: .\.build\restore.ps1 -commitSHA ${{ github.sha }} -prevSHA ${{ steps.git.outputs.prev_sha }}
       shell: powershell
       
     - name: Build
-      run: .\.build\build.ps1 -commitSHA ${{ github.sha }} -mainSHA ${{ steps.mainSHA.outputs.mainSHA }}
+      run: .\.build\build.ps1 -commitSHA ${{ github.sha }} -prevSHA ${{ steps.git.outputs.prev_sha }}
       shell: powershell
       
     - name: Test
-      run: .\.build\test.ps1 -commitSHA ${{ github.sha }} -mainSHA ${{ steps.mainSHA.outputs.mainSHA }}
+      run: .\.build\test.ps1 -commitSHA ${{ github.sha }} -prevSHA ${{ steps.git.outputs.prev_sha }}
       shell: powershell
       
     - name: Version
-      run: .\.build\version.ps1 -commitSHA ${{ github.sha }} -mainSHA ${{ steps.mainSHA.outputs.mainSHA }} -isRelease 0
+      run: .\.build\version.ps1 -commitSHA ${{ github.sha }} -prevSHA ${{ steps.git.outputs.prev_sha }}
       shell: powershell
