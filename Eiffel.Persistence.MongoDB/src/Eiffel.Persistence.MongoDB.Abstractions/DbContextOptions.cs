@@ -7,7 +7,6 @@ namespace Eiffel.Persistence.MongoDB.Abstractions
     {
         public abstract string Database { get; set; }
         public abstract Type ContextType { get; }
-        public abstract string ConnectionString { get; set; }
         public abstract MongoClientSettings ClientSettings { get; set; }
     }
 }

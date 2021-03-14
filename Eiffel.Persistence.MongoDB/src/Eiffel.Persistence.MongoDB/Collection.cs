@@ -58,6 +58,10 @@ namespace Eiffel.Persistence.MongoDB
 
         public virtual IEnumerator<TDocument> GetEnumerator()
         {
+            if (_filterExpression != null)
+            {
+                return _collection.AsQueryable().Where(_filterExpression.Compile()).GetEnumerator();
+            }
             return _collection.AsQueryable().GetEnumerator();
         }
 

@@ -11,15 +11,15 @@ namespace Eiffel.Persistence.MongoDB
             ClientSettings = clientSettings;
         }
 
-        public DbContextOptions(string host, int port)
+        public DbContextOptions(string host, int port, string database)
         {
             ClientSettings = new MongoClientSettings
             {
                 Server = new MongoServerAddress(host, port)
             };
+            Database = database;
         }
         public override string Database { get; set; }
-        public override string ConnectionString { get; set; }
         public override MongoClientSettings ClientSettings { get; set; }
         public override Type ContextType
         {

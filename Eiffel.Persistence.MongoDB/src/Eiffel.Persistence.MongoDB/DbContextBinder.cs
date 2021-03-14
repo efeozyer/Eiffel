@@ -1,4 +1,5 @@
 ﻿using Eiffel.Persistence.MongoDB.Abstractions;
+using Eiffel.Persistence.MongoDB.Exceptions;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,11 @@ namespace Eiffel.Persistence.MongoDB
             foreach(var property in GetDbContextProperties(context))
             {
                 var metadata = GetCollectionMetadata(property, serviceProvider);
+                if (string.IsNullOrEmpty(metadata.CollectionName))
+                {
+                    throw new CollectionTypeConfigurationException("Collection name must be specified.");
+                }
+
                 if (!existingCollections.Select(x => x["name"].AsString).Contains(metadata.CollectionName))
                 {
                     context.Database.CreateCollection(metadata.CollectionName, metadata.CollectionOptions);
@@ -57,10 +63,13 @@ namespace Eiffel.Persistence.MongoDB
             }
             return properties;
         }
-
         private static CollectionTypeMetadata GetCollectionMetadata(PropertyInfo propertyInfo, IServiceProvider serviceProvider)
         {
             var collectionTypeConfig = GetCollectionConfiguration(propertyInfo.PropertyType, serviceProvider);
+            if (collectionTypeConfig == null)
+            {
+                throw new CollectionTypeConfigurationMissingException($"{propertyInfo.Name} collection type configuration is missing.");
+            }
             var collectionTypeBuilder = CreateCollectionTypeBuilder(propertyInfo.PropertyType);
             collectionTypeConfig.Configure(collectionTypeBuilder);
             return (CollectionTypeMetadata)collectionTypeBuilder.Build();
