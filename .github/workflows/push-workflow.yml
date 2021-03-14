@@ -30,8 +30,8 @@ jobs:
       run: .\.build\test.ps1 -commitSHA ${{ github.sha }} -prevSHA ${{ steps.git.outputs.prev_sha }}
       shell: powershell
       
-    - name: Version
-      run: |
-        .\.build\version.ps1 -commitSHA ${{ github.sha }} -prevSHA ${{ steps.git.outputs.prev_sha }}
-        git push
-      shell: powershell
+    #- name: Version
+    #  run: |
+    #    .\.build\version.ps1 -commitSHA ${{ github.sha }} -prevSHA ${{ steps.git.outputs.prev_sha }}
+    #    git push
+    #  shell: powershell
