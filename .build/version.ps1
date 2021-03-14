@@ -41,7 +41,6 @@ foreach ($rootDir in Get-ChildItem -Directory -Path . -Filter 'Eiffel.*')
             
             & git add .
             & git commit -m "$($subDir.Name).v$($newVersion)"
-            & git push
             
             if (-Not($?)) 
             {
