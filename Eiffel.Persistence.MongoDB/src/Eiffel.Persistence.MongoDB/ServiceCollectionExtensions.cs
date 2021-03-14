@@ -10,14 +10,16 @@ namespace Eiffel.Persistence.MongoDB
             where TContext : DbContext
         {
             services.Scan(x => x.FromApplicationDependencies()
-                   .AddClasses(s => s.AssignableTo(typeof(ICollectionTypeConfiguration<>)).Where(f => !f.IsGenericType))
-                   .AsImplementedInterfaces()
-                   .WithSingletonLifetime());
+                                .AddClasses(x => x.AssignableTo(typeof(ICollectionTypeConfiguration<>))
+                                .Where(x => !x.IsGenericType))
+                                .AsImplementedInterfaces()
+                                .WithSingletonLifetime());
 
             services.AddTransient(serviceProvider =>
             {
                 var context = (TContext)Activator.CreateInstance(typeof(TContext), new object[] { options });
                 DbContextBinder<TContext>.Bind(context, serviceProvider);
+                DbContextSeeder<TContext>.Seed(context, serviceProvider);
                 return context;
             });
 
