@@ -77,6 +77,7 @@ namespace Eiffel.Persistence.MongoDB.Tests
             var mockConfig = new Mock<UserCollectionTypeConfiguration>() { CallBase = true };
             mockConfig.Setup(x => x.Configure(It.IsAny<ICollectionTypeBuilder<User>>())).Callback<ICollectionTypeBuilder<User>>((builder) =>
             {
+                builder.ToCollection("Users");
                 builder.HasQueryFilter(x => x.IsDeleted == isDeleted);
             });
 
@@ -107,6 +108,7 @@ namespace Eiffel.Persistence.MongoDB.Tests
             var mockConfig = new Mock<UserCollectionTypeConfiguration>() { CallBase = true };
             mockConfig.Setup(x => x.Configure(It.IsAny<ICollectionTypeBuilder<User>>())).Callback<ICollectionTypeBuilder<User>>((builder) =>
             {
+                builder.ToCollection("Users");
                 builder
                     .HasIndex(x => x.CreatedOn, false)
                     .HasIndex(x => x.Name, false);
@@ -122,55 +124,6 @@ namespace Eiffel.Persistence.MongoDB.Tests
             // Assert
             mockIndexManager.Verify(x => x.CreateOne(It.IsAny<CreateIndexModel<User>>(), It.IsAny<CreateOneIndexOptions>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
             indexKeyModels.Count.Should().Be(2);
-        }
-
-        [Fact]
-        public void ContextTypeBuilder_Should_Seed_Collection()
-        {
-            // Arrange
-            var documents = new List<User>()
-            {
-                User.Create("Test", 1, false),
-                User.Create("Test", 2, true)
-            };
-
-            var collectionBuilder = new MockCollectionBuilder<User>();
-            var mockCollection = collectionBuilder
-                .WithEmptyCollection()
-                .WithCreate()
-                .WithRead()
-                .WithCount()
-                .Build();
-
-            var mockDatabase = new MockDatabaseBuilder<User>(mockCollection.Object)
-               .WithCollectionNames(new string[0])
-               .Build();
-
-            var mockClient = new MockClientBuilder(mockDatabase.Object).Build();
-            var mockOptions = new Mock<DbContextOptions<UserDbContext>>(new MongoClientSettings()) { CallBase = true };
-            var mockContext = new Mock<UserDbContext>(new[] { mockOptions.Object }) { CallBase = true };
-
-            mockContext.SetupGet(x => x.Database).Returns(mockDatabase.Object);
-            mockContext.SetupGet(x => x.Client).Returns(mockClient.Object);
-
-            var mockConfig = new Mock<UserCollectionTypeConfiguration>() { CallBase = true };
-            mockConfig.Setup(x => x.Configure(It.IsAny<ICollectionTypeBuilder<User>>()))
-                .Callback((ICollectionTypeBuilder<User> builder) =>
-                {
-                    builder.HasDocuments(documents);
-                });
-
-            _services.AddSingleton<ICollectionTypeConfiguration<User>>(mockConfig.Object);
-            _services.AddSingleton(mockContext.Object);
-            var serviceProvider = _services.BuildServiceProvider();
-            DbContextBinder<UserDbContext>.Bind(mockContext.Object, serviceProvider);
-
-            // Act
-            var users = mockContext.Object.Users.Find(x => true).ToList();
-
-            // Assert
-            mockCollection.Verify(x => x.InsertMany(It.IsAny<IEnumerable<User>>(), It.IsAny<InsertManyOptions>(), It.IsAny<CancellationToken>()), Times.Once);
-            users.Count.Should().Be(documents.Count);
         }
 
         private void CreateMockObjects<TDocument, TContext>(

@@ -1,6 +1,8 @@
 ﻿using Eiffel.Persistence.MongoDB.Abstractions;
 using MongoDB.Driver;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace Eiffel.Persistence.MongoDB
@@ -25,10 +27,30 @@ namespace Eiffel.Persistence.MongoDB
             createIndexMethod.Invoke(collection.Indexes, new[] { instance, null, default });
         }
 
-        public static void SeedCollection(dynamic collection, dynamic documents)
+        public static bool SeedCollection(dynamic collection, dynamic documents)
         {
-            var genericMethod = collection.GetType().GetMethod("AddRange");
-            genericMethod.Invoke(collection, new[] { documents });
+            try
+            {
+                var genericMethod = collection.GetType().GetMethod("AddRange");
+                genericMethod.Invoke(collection, new[] { documents });
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public static List<string> GetExistingCollections(TContext context)
+        {
+            var existingCollections = context.Database.ListCollections().ToListAsync().Result;
+            return existingCollections.Select(x => x["name"].AsString).ToList();
+        }
+
+        internal static object CreateCollection(Type propertyType, object collection, dynamic filterExpression)
+        {
+            var instanceType = typeof(Collection<>).MakeGenericType(propertyType.GetGenericArguments()[0]);
+            return Activator.CreateInstance(instanceType, new[] { collection, filterExpression });
         }
     }
 }

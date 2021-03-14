@@ -14,7 +14,7 @@ namespace Eiffel.Persistence.MongoDB.Tests
 
         public MockDatabaseBuilder(IMongoCollection<TDocument> collection)
         {
-            _database = new Mock<IMongoDatabase>();
+            _database = new Mock<IMongoDatabase>() { CallBase = true };
             _collection = collection;
         }
 
