@@ -41,20 +41,6 @@ namespace Eiffel.Persistence.MongoDB
             return true;
         }
 
-        public static bool SeedCollection(IClientSessionHandle sessionHandle, dynamic collection, dynamic documents)
-        {
-            try
-            {
-                var genericMethod = collection.GetType().GetMethod("AddRange");
-                genericMethod.Invoke(collection, new[] { sessionHandle, documents });
-            }
-            catch
-            {
-                return false;
-            }
-            return true;
-        }
-
         public static List<string> GetExistingCollections(TContext context)
         {
             var existingCollections = context.Database.ListCollections().ToListAsync().Result;
