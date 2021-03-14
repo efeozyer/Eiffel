@@ -94,11 +94,6 @@ namespace Eiffel.Persistence.MongoDB
             InsertMany(documents, null, default);
         }
 
-        public void AddRange(IClientSessionHandle sessionHandle, IEnumerable<TDocument> documents)
-        {
-            InsertMany(sessionHandle, documents, null, default);
-        }
-
         public Task AddRangeAsync(IEnumerable<TDocument> documents, CancellationToken cancellationToken = default)
         {
             return InsertManyAsync(documents, null, cancellationToken);
