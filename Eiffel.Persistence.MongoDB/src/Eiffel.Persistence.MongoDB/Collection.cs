@@ -98,7 +98,7 @@ namespace Eiffel.Persistence.MongoDB
         {
             return InsertManyAsync(documents, null, cancellationToken);
         }
-
+         
         public void Update(Expression<Func<TDocument, bool>> expression, TDocument document)
         {
             ReplaceOne(expression, document, null, default);
