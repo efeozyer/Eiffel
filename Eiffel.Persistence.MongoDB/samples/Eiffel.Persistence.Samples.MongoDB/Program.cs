@@ -1,9 +1,12 @@
+using Eiffel.Persistence.MongoDB;
+using Eiffel.Persistence.Samples.MongoDB.Context;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Eiffel.Persistence.Samples.MongoDB
@@ -20,6 +23,9 @@ namespace Eiffel.Persistence.Samples.MongoDB
                 var logger = serviceHost.Services.GetRequiredService<ILogger<Program>>();
                 logger.LogError((Exception)exception.ExceptionObject, "UnhandledException");
             };
+
+            var dbContext = serviceHost.Services.GetRequiredService<SampleDbContext>();
+            var users = dbContext.Users.ToList();
             await serviceHost.RunAsync();
         }
 
@@ -44,7 +50,7 @@ namespace Eiffel.Persistence.Samples.MongoDB
 
         private static void ConfigureServices(HostBuilderContext builderContext, IServiceCollection services)
         {
-
+            services.AddDbContext(new DbContextOptions<SampleDbContext>("127.0.0.1", 27017, "eiffel"));
         }
     }
 }

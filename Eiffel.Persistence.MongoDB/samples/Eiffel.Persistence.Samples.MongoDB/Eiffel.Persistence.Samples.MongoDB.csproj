@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Eiffel.Persistence.MongoDB.Abstractions\Eiffel.Persistence.MongoDB.Abstractions.csproj" />
     <ProjectReference Include="..\..\src\Eiffel.Persistence.MongoDB\Eiffel.Persistence.MongoDB.csproj" />
   </ItemGroup>
 </Project>
