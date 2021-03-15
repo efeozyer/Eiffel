@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eiffel.Persistence.Tests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eiffel.Persistence", "src\Eiffel.Persistence\Eiffel.Persistence.csproj", "{5297521D-90D1-48B2-BA50-6AFCD3352BD4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eiffel.Persistence.Tenancy", "src\Eiffel.Persistence.Tenancy\Eiffel.Persistence.Tenancy.csproj", "{22F25A98-34E1-4354-A511-B691C208AF78}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{5297521D-90D1-48B2-BA50-6AFCD3352BD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5297521D-90D1-48B2-BA50-6AFCD3352BD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5297521D-90D1-48B2-BA50-6AFCD3352BD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22F25A98-34E1-4354-A511-B691C208AF78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22F25A98-34E1-4354-A511-B691C208AF78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22F25A98-34E1-4354-A511-B691C208AF78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22F25A98-34E1-4354-A511-B691C208AF78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,6 +47,7 @@ Global
 		{FC0B9040-1D13-41A6-93C4-28AAD453AE6F} = {E0C68D55-5412-4F6D-BDB1-D4889300ED18}
 		{E631A1C9-EEBF-4C56-9F94-E7BFE84D495F} = {0DDC52B8-FCA5-46CC-B91A-FCB9217AA9A7}
 		{5297521D-90D1-48B2-BA50-6AFCD3352BD4} = {E0C68D55-5412-4F6D-BDB1-D4889300ED18}
+		{22F25A98-34E1-4354-A511-B691C208AF78} = {E0C68D55-5412-4F6D-BDB1-D4889300ED18}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6F0EA3B3-7216-411B-A9A3-623766658FC5}
