@@ -1,5 +1,6 @@
 ﻿using Eiffel.Persistence.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,16 +10,17 @@ using System.Text.RegularExpressions;
 
 namespace Eiffel.Persistence.Tenancy
 {
-    public delegate DbContext TenantDbContext();
     public class DatabasePerTenantStrategy<TContext> : ITenancyStrategy<TContext>
         where TContext : DbContext
     {
+        private readonly IServiceCollection _services;
         private readonly DbContextOptions<TContext> _dbContextOptions;
         private readonly TenancyDbContext _dbContext;
-        private readonly Dictionary<string, object> _contextInstaces = new Dictionary<string, object>();
+        private readonly Dictionary<string, Type> _contextTypes = new Dictionary<string, Type>();
 
-        public DatabasePerTenantStrategy(DbContextOptions<TContext> dbContextOptions, TenancyDbContext dbContext)
+        public DatabasePerTenantStrategy(IServiceCollection services, DbContextOptions<TContext> dbContextOptions, TenancyDbContext dbContext)
         {
+            _services = services ?? throw new ArgumentNullException(nameof(services));
             _dbContextOptions = dbContextOptions ?? throw new ArgumentNullException(nameof(dbContextOptions));
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
@@ -26,24 +28,29 @@ namespace Eiffel.Persistence.Tenancy
         public void Execute()
         {
             var tenants = _dbContext.Tenants.ToList();
-            foreach(var tenant in tenants)
+            foreach (var tenant in tenants)
             {
-                var context = ILContextBuilder<TContext>.Build(tenant.Name, _dbContextOptions);
-                _contextInstaces.Add(tenant.Id, context);
+                var contextType = ILContextBuilder<TContext>.Build(tenant.Name, _dbContextOptions);
+                _services.AddTransient(serviceProvider =>
+                {
+                    return Activator.CreateInstance(contextType, new[] { _dbContextOptions });
+                });
+                _contextTypes.Add(tenant.Id, contextType);
             }
+            _services.AddTransient<Func<string, TContext>>(serviceProvider => 
+                (tenantId) => (TContext)serviceProvider.GetRequiredService(_contextTypes[tenantId]));
         }
     }
 
     internal static class ILContextBuilder<TContext>
         where TContext : DbContext
     {
-        public static object Build(string name, DbContextOptions<TContext> contextOptions)
+        public static Type Build(string name, DbContextOptions<TContext> contextOptions)
         {
             var className = Regex.Replace(name, "[^0-9a-zA-Z]+", "_", RegexOptions.IgnoreCase);
             var typeBuilder = GetTypeBuilder(className, typeof(TContext));
             var contextType = typeBuilder.CreateType();
-            var instance = Activator.CreateInstance(contextType, new[] { contextOptions });
-            return instance;
+            return contextType;
         }
 
         private static TypeBuilder GetTypeBuilder(string typeName, Type baseType = null)
