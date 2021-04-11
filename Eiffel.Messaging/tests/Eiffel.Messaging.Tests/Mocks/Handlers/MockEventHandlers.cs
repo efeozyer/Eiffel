@@ -7,7 +7,7 @@ namespace Eiffel.Messaging.Tests.Mocks.Handlers
 {
     public class MockEventHandler1 : EventHandler<MockEvent>
     {
-        public override Task HandleAsync(MockEvent @event, CancellationToken cancellationToken)
+        public override Task HandleAsync(MockEvent @event, CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
         }
@@ -15,7 +15,7 @@ namespace Eiffel.Messaging.Tests.Mocks.Handlers
 
     public class MockEventHandler2 : EventHandler<MockEvent>
     {
-        public override Task HandleAsync(MockEvent @event, CancellationToken cancellationToken)
+        public override Task HandleAsync(MockEvent @event, CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
         }
