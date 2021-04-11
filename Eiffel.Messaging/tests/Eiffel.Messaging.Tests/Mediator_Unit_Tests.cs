@@ -166,7 +166,7 @@ namespace Eiffel.Messaging.Tests
             string callOrder = string.Empty;
             var mockMessage = new MockMessage();
 
-            var prePipelineMock = new Mock<ValidationPipeline>() { CallBase = true };
+            var prePipelineMock = new Mock<MockValidationPipeline>() { CallBase = true };
             prePipelineMock.Setup(x => x.ProcessAsync(It.IsAny<MockMessage>(), It.IsAny<CancellationToken>()))
                 .Callback(() =>
                 {
@@ -180,7 +180,7 @@ namespace Eiffel.Messaging.Tests
                     callOrder += "B";
                 });
 
-            var postPipelineMock = new Mock<AuditLoggingPipeline>() { CallBase = true };
+            var postPipelineMock = new Mock<MockAuditLoggingPipeline>() { CallBase = true };
             postPipelineMock.Setup(x => x.ProcessAsync(It.IsAny<MockMessage>(), It.IsAny<CancellationToken>()))
                 .Callback(() =>
                 {
@@ -207,7 +207,7 @@ namespace Eiffel.Messaging.Tests
             // Arrange
             var mockMessage = new MockValidatableMessage();
 
-            var validationPipeline = new Mock<ValidationPipeline>() { CallBase = true };
+            var validationPipeline = new Mock<MockValidationPipeline>() { CallBase = true };
             validationPipeline.Setup(x => x.ProcessAsync(It.IsAny<MockValidatableMessage>(), It.IsAny<CancellationToken>()));
 
             var handlerMock = new Mock<MockValidatableMessageHandler>() { CallBase = true };
