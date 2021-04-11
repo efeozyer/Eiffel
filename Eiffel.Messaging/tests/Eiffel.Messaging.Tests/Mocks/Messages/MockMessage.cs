@@ -4,7 +4,7 @@ using Eiffel.Messaging.Attributes;
 namespace Eiffel.Messaging.Tests.Mocks.Messages
 {
     [TopicName("test-topic")]
-    public class MockMessage : IMessage
+    public class MockMessage : Message
     {
         public string Message { get; set; }
 
@@ -16,6 +16,19 @@ namespace Eiffel.Messaging.Tests.Mocks.Messages
         public MockMessage()
         {
 
+        }
+    }
+
+    public class MockUnknownMessage : Message
+    {
+
+    }
+
+    public class MockValidatableMessage : Message, IValidatable
+    {
+        public void Validate()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -9,14 +9,11 @@ namespace Eiffel.Messaging
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddMediator(this IServiceCollection services, Action<MessagingMiddlewareOptions> options = null)
+        public static IServiceCollection AddMediator(this IServiceCollection services)
         {
-            MessagingMiddlewareOptions middlewareOptions = new MessagingMiddlewareOptions();
-            options?.Invoke(middlewareOptions);
-            
             services.AddSingleton<IMediator>(serviceProvider =>
             {
-                return new Mediator(serviceProvider, middlewareOptions);
+                return new Mediator(serviceProvider);
             });
 
             services.AddMessageHandlers();
@@ -25,19 +22,17 @@ namespace Eiffel.Messaging
 
         public static IServiceCollection AddMessageHandlers(this IServiceCollection services)
         {
-            services.RegisterType(typeof(ICommandHandler<>));
-            services.RegisterType(typeof(IQueryHandler<,>));
-            services.RegisterType(typeof(IEventHandler<>));
+            services.RegisterType(typeof(CommandHandler<>));
+            services.RegisterType(typeof(QueryHandler<,>));
+            services.RegisterType(typeof(Abstractions.EventHandler<>));
+            services.RegisterType(typeof(MessageHandler<>));
             return services;
         }
 
-        public static IServiceCollection AddMessageBus<TClient, TConfig>(this IServiceCollection services, Action<MessagingMiddlewareOptions> options = null)
+        public static IServiceCollection AddMessageBus<TClient, TConfig>(this IServiceCollection services)
             where TClient : class, IMessageQueueClient
             where TConfig : class, IMessageQueueClientConfig
         {
-            MessagingMiddlewareOptions middlewareOptions = new MessagingMiddlewareOptions();
-            options?.Invoke(middlewareOptions);
-
             services.AddSingleton(serviceProvider =>
             {
                 var config = Activator.CreateInstance<TConfig>();
@@ -47,7 +42,7 @@ namespace Eiffel.Messaging
                 var client = (IMessageQueueClient)Activator.CreateInstance(typeof(TClient), new object[] { logger, config });
 
                 var mediator = serviceProvider.GetRequiredService<IMediator>();
-                return new MessageBus(client, mediator, middlewareOptions);
+                return new MessageBus(client, mediator);
             });
             return services;
         }
@@ -70,11 +65,10 @@ namespace Eiffel.Messaging
             return services;
         }
 
-        public static IServiceCollection AddMessaging<TClient, TConfig>(this IServiceCollection services, Action<MessagingMiddlewareOptions> options = null)
+        public static IServiceCollection AddMessaging<TClient, TConfig>(this IServiceCollection services)
             where TClient : class, IMessageQueueClient
             where TConfig : class, IMessageQueueClientConfig
         {
-            services.AddMessageBus<TClient, TConfig>(options);
             services.AddEventBus<TClient, TConfig>();
             return services;
         }
@@ -82,7 +76,7 @@ namespace Eiffel.Messaging
         private static void RegisterType(this IServiceCollection services, Type targetType)
         {
             services.Scan(x => x.FromApplicationDependencies()
-                .AddClasses(s => s.AssignableTo(targetType).Where(f => !f.IsGenericType))
+                .AddClasses(x => x.AssignableTo(targetType).Where(x => !x.IsGenericType))
                 .AsImplementedInterfaces()
                 .WithTransientLifetime());
         }

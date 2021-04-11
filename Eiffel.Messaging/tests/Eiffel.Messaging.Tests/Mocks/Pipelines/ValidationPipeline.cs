@@ -3,11 +3,11 @@ using Eiffel.Messaging.Tests.Mocks.Messages;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Eiffel.Messaging.Tests.Mocks.Middlewares
+namespace Eiffel.Messaging.Tests.Mocks.Pipelines
 {
-    public class ValidationMiddleware : IMessagingMiddleware
+    public class ValidationPipeline : IPipelinePreProcessor
     {
-        public virtual Task InvokeAsync(object message, CancellationToken cancellationToken)
+        public virtual Task ProcessAsync<TMessage>(TMessage message, CancellationToken cancellationToken = default)
         {
             if (message is IValidatable msg)
             {

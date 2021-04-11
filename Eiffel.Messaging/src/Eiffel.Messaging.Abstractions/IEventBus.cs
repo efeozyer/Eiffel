@@ -12,10 +12,10 @@ namespace Eiffel.Messaging.Abstractions
             where TEvent : class, new();
 
         void Subscribe<TEvent>()
-            where TEvent : class, IEvent, new();
+            where TEvent : Event, new();
 
         Task SubscribeAsync<TEvent>(CancellationToken cancellationToken)
-            where TEvent : class, IEvent, new();
+            where TEvent : Event, new();
 
         void Unsubscribe();
     }

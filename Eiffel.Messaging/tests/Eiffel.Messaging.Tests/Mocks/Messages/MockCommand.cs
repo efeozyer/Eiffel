@@ -3,16 +3,16 @@ using Eiffel.Messaging.Tests.Mocks.Exceptions;
 
 namespace Eiffel.Messaging.Tests.Mocks.Messages
 {
-    public class MockCommand : ICommand
+    public class MockCommand : Command
     {
     }
 
-    public class MockUnknownCommand : ICommand
+    public class MockUnknownCommand : Command
     {
 
     }
 
-    public class MockInvalidCommand : ICommand, IValidatable
+    public class MockInvalidCommand : Command, IValidatable
     {
         public void Validate()
         {

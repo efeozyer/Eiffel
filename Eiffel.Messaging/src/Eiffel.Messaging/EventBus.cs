@@ -30,7 +30,7 @@ namespace Eiffel.Messaging
         }
 
         public virtual void Subscribe<TEvent>()
-            where TEvent : class, IEvent, new()
+            where TEvent : Event, new()
         {
             _client.Consume<TEvent>(typeof(TEvent).GetTopic(), async (@event) =>
             {
@@ -39,7 +39,7 @@ namespace Eiffel.Messaging
         }
 
         public virtual Task SubscribeAsync<TEvent>(CancellationToken cancellationToken)
-            where TEvent : class, IEvent, new()
+            where TEvent : Event, new()
         {
             return _client.ConsumeAsync<TEvent>(typeof(TEvent).GetTopic(), async (@event) =>
             {
