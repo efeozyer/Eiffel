@@ -24,12 +24,14 @@ namespace Eiffel.Messaging
             builder.AddSingleton<IMediator, Mediator>();
             builder.RegisterHandlers(assemblies);
             builder.RegisterPipelines(assemblies);
+
             return builder;
         }
 
         public static ContainerBuilder AddSingleton<TService, TImplementation>(this ContainerBuilder builder)
         {
             builder.RegisterType<TImplementation>().As<TService>().SingleInstance();
+
             return builder;
         }
 
@@ -46,8 +48,10 @@ namespace Eiffel.Messaging
                 var client = (IMessageQueueClient)Activator.CreateInstance(typeof(TClient), new object[] { logger, config });
 
                 var mediator = context.Resolve<IMediator>();
+
                 return new MessageBus(client, mediator);
             }).SingleInstance();
+
             return builder;
         }
 
@@ -64,8 +68,10 @@ namespace Eiffel.Messaging
                 var client = (IMessageQueueClient)Activator.CreateInstance(typeof(TClient), new object[] { logger, config });
 
                 var mediator = context.Resolve<IMediator>();
+
                 return new EventBus(client, mediator);
             }).SingleInstance();
+
             return builder;
         }
 
@@ -76,6 +82,7 @@ namespace Eiffel.Messaging
             builder.AddMediator();
             builder.AddEventBus<TClient, TConfig>();
             builder.AddMessageBus<TClient, TConfig>();
+
             return builder;
         }
 

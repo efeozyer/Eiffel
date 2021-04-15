@@ -57,14 +57,15 @@ namespace Eiffel.Samples.Messaging.Kafka
 
         private static void ConfigureContainer(HostBuilderContext builderContext, ContainerBuilder builder)
         {
-            // services.AddMediator();
+            // Mediator
+            builder.AddMediator();
 
             // NOTE: You can only use one of the two options 
             // You can specify different brokers for Events and Messages
             // services.AddEventBus<KafkaClient, KafkaClientConfig>();
             // services.AddMessageBus<KafkaClient, KafkaClientConfig>();
 
-            // Mediator, EventBus, MessageBus
+            // EventBus, MessageBus
             builder.AddMessaging<KafkaClient, KafkaClientConfig>();
 
             builder.RegisterType<WorkerService>().As<IHostedService>().InstancePerDependency();
