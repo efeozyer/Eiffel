@@ -22,8 +22,8 @@ namespace Eiffel.Messaging
             }
 
             builder.AddSingleton<IMediator, Mediator>();
-            builder.AddMessageHandlers(assemblies);
-            builder.AddPipelines(assemblies);
+            builder.RegisterHandlers(assemblies);
+            builder.RegisterPipelines(assemblies);
             return builder;
         }
 
@@ -79,7 +79,7 @@ namespace Eiffel.Messaging
             return builder;
         }
 
-        private static ContainerBuilder AddMessageHandlers(this ContainerBuilder builder, Assembly[] assemblies = null)
+        private static ContainerBuilder RegisterHandlers(this ContainerBuilder builder, Assembly[] assemblies = null)
         {
            builder.RegisterAssemblyTypes(assemblies)
                .AsClosedTypesOf(typeof(CommandHandler<>))
@@ -104,7 +104,7 @@ namespace Eiffel.Messaging
             return builder;
         }
 
-        private static ContainerBuilder AddPipelines(this ContainerBuilder builder, Assembly[] assemblies = null)
+        private static ContainerBuilder RegisterPipelines(this ContainerBuilder builder, Assembly[] assemblies = null)
         {
             builder.RegisterAssemblyTypes(assemblies)
                .AssignableTo(typeof(IPipelinePreProcessor))

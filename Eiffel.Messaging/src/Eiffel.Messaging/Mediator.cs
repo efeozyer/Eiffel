@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Eiffel.Messaging.Abstractions;
 using Eiffel.Messaging.Exceptions;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,8 +70,6 @@ namespace Eiffel.Messaging
             if (cancellationToken.IsCancellationRequested)
                 throw new OperationCanceledException();
 
-            ResolveDataContext(handler);
-
             var handleMethod = handler.GetType().GetMethod("HandleAsync");
             if (handleMethod == null)
                 throw new MissingMethodException("HandleAsync method is missing!");
@@ -94,11 +91,6 @@ namespace Eiffel.Messaging
             return result;
         }
 
-        protected virtual void ResolveDataContext(object handler)
-        {
-
-        }
-
         private Task HandleException(Task task)
         {
             return task.ContinueWith(task =>
@@ -110,7 +102,5 @@ namespace Eiffel.Messaging
                 return task;
             });
         }
-
-      
     }
 }
