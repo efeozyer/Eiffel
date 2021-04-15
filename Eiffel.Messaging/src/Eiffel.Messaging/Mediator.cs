@@ -1,4 +1,5 @@
-﻿using Eiffel.Messaging.Abstractions;
+﻿using Autofac;
+using Eiffel.Messaging.Abstractions;
 using Eiffel.Messaging.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -12,17 +13,17 @@ namespace Eiffel.Messaging
 {
     public class Mediator : IMediator
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly ILifetimeScope _lifetimeScope;
 
-        public Mediator(IServiceProvider serviceProvider)
+        public Mediator(ILifetimeScope lifetimeScope)
         {
-            _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+            _lifetimeScope = lifetimeScope ?? throw new ArgumentNullException(nameof(lifetimeScope));
         }
 
         public virtual Task PublishAsync<TEvent>(TEvent @event, CancellationToken cancellationToken = default) where TEvent : Event
         {
-            var handlerType = typeof(Abstractions.EventHandler<TEvent>);
-            var handlers = _serviceProvider.GetServices(handlerType) as IEnumerable<Abstractions.EventHandler<TEvent>>;
+            var handlerType = typeof(IEnumerable<Abstractions.EventHandler<TEvent>>);
+            var handlers = _lifetimeScope.Resolve(handlerType) as IEnumerable<Abstractions.EventHandler<TEvent>>;
             if (handlers == null || !handlers.Any())
             {
                 throw new HandlerCouldNotBeResolvedException($"{@event.GetType().Name} handler could not be resolved");
@@ -63,18 +64,20 @@ namespace Eiffel.Messaging
 
         private TResult DispatchAsync<TMessage, TResult>(TMessage message, Type handlerType, CancellationToken cancellationToken)
         {
-            var handler = _serviceProvider.GetService(handlerType);
+            var handler = _lifetimeScope.ResolveOptional(handlerType);
             if (handler == null)
                 throw new HandlerCouldNotBeResolvedException($"{message.GetType().Name} handler could not be resolved");
 
             if (cancellationToken.IsCancellationRequested)
                 throw new OperationCanceledException();
 
+            ResolveDataContext(handler);
+
             var handleMethod = handler.GetType().GetMethod("HandleAsync");
             if (handleMethod == null)
                 throw new MissingMethodException("HandleAsync method is missing!");
 
-            var preProcessors = _serviceProvider.GetServices<IPipelinePreProcessor>()?.ToList();
+            var preProcessors = _lifetimeScope.ResolveOptional<IEnumerable<IPipelinePreProcessor>>()?.ToList();
             foreach(var processor in preProcessors ?? Enumerable.Empty<IPipelinePreProcessor>())
             {
                 HandleException(processor.ProcessAsync(message, cancellationToken)).ConfigureAwait(false);
@@ -82,13 +85,18 @@ namespace Eiffel.Messaging
 
             var result = (TResult)handleMethod.Invoke(handler, new object[] { message, cancellationToken });
 
-            var postProcessors = _serviceProvider.GetServices<IPipelinePostProcessor>()?.ToList();
+            var postProcessors = _lifetimeScope.ResolveOptional<IEnumerable<IPipelinePostProcessor>>()?.ToList();
             foreach (var processor in postProcessors ?? Enumerable.Empty<IPipelinePostProcessor>())
             {
                 HandleException(processor.ProcessAsync(message, cancellationToken)).ConfigureAwait(false);
             }
 
             return result;
+        }
+
+        protected virtual void ResolveDataContext(object handler)
+        {
+
         }
 
         private Task HandleException(Task task)
@@ -102,5 +110,7 @@ namespace Eiffel.Messaging
                 return task;
             });
         }
+
+      
     }
 }

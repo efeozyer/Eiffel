@@ -7,7 +7,6 @@ namespace Eiffel.Messaging.Tests.Mocks.Handlers
 {
     public class MockCommandHandler : CommandHandler<MockCommand>
     {
-
         public override Task<string> HandleAsync(MockCommand command, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(string.Empty);

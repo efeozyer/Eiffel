@@ -7,8 +7,6 @@ namespace Eiffel.Messaging.Abstractions
         where TQuery : Query<TReply>
         where TReply : class
     {
-        public IDbContext DbContext { get; internal set; }
-
         public abstract Task<TReply> HandleAsync(TQuery query, CancellationToken cancellationToken = default);
     }
 }
