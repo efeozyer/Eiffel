@@ -9,7 +9,7 @@ namespace Eiffel.Messaging.Tests.Mocks.Messages
         void Validate();
     }
 
-    public class MockQuery : IQuery<MockQueryResult>, IValidatable
+    public class MockQuery : Query<MockQueryResult>, IValidatable
     {
         private readonly int _skip;
         private readonly int _take;
@@ -46,12 +46,17 @@ namespace Eiffel.Messaging.Tests.Mocks.Messages
         }
     }
 
-    public class MockUnknownQuery : IQuery<object>
+    public class MockUnknownQuery : Query<MockUnkownReply>
     {
 
     }
 
-    public class MockInvalidQuery : IQuery<object>, IValidatable
+    public class MockUnkownReply
+    {
+
+    }
+
+    public class MockInvalidQuery : Query<object>, IValidatable
     {
         public MockInvalidQuery()
         {

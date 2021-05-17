@@ -4,7 +4,7 @@ using Eiffel.Messaging.Attributes;
 namespace Eiffel.Messaging.Tests.Mocks.Events
 {
     [TopicName("mock-topic")]
-    public class MockEvent : IEvent
+    public class MockEvent : Event
     {
         public string Name { get; private set; }
 

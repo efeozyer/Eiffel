@@ -5,17 +5,17 @@ using System.Threading.Tasks;
 
 namespace Eiffel.Messaging.Tests.Mocks.Handlers
 {
-    public class MockEventHandler1 : IEventHandler<MockEvent>
+    public class MockEventHandler1 : EventHandler<MockEvent>
     {
-        public virtual Task HandleAsync(MockEvent @event, CancellationToken cancellationToken)
+        public override Task HandleAsync(MockEvent @event, CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
         }
     }
 
-    public class MockEventHandler2 : IEventHandler<MockEvent>
+    public class MockEventHandler2 : EventHandler<MockEvent>
     {
-        public virtual Task HandleAsync(MockEvent @event, CancellationToken cancellationToken)
+        public override Task HandleAsync(MockEvent @event, CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
         }

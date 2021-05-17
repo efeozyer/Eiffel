@@ -1,90 +1,129 @@
-﻿using Eiffel.Messaging.Abstractions;
+﻿using Autofac;
+using Eiffel.Messaging.Abstractions;
 using Eiffel.Messaging.Extensions;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace Eiffel.Messaging
 {
-    public static class ServiceCollectionExtensions
+    public static class ContainerBuilderExtensions
     {
-        public static IServiceCollection AddMediator(this IServiceCollection services, Action<MessagingMiddlewareOptions> options = null)
+        public static ContainerBuilder AddMediator(this ContainerBuilder builder, Assembly[] assemblies = null)
         {
-            MessagingMiddlewareOptions middlewareOptions = new MessagingMiddlewareOptions();
-            options?.Invoke(middlewareOptions);
-            
-            services.AddSingleton<IMediator>(serviceProvider =>
+            if (assemblies == null)
             {
-                return new Mediator(serviceProvider, middlewareOptions);
-            });
+                assemblies = Directory.EnumerateFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll", SearchOption.TopDirectoryOnly)
+                    .Select(Assembly.LoadFrom)
+                    .ToArray();
+            }
 
-            services.AddMessageHandlers();
-            return services;
+            builder.AddSingleton<IMediator, Mediator>();
+            builder.RegisterHandlers(assemblies);
+            builder.RegisterPipelines(assemblies);
+
+            return builder;
         }
 
-        public static IServiceCollection AddMessageHandlers(this IServiceCollection services)
+        public static ContainerBuilder AddSingleton<TService, TImplementation>(this ContainerBuilder builder)
         {
-            services.RegisterType(typeof(ICommandHandler<>));
-            services.RegisterType(typeof(IQueryHandler<,>));
-            services.RegisterType(typeof(IEventHandler<>));
-            return services;
+            builder.RegisterType<TImplementation>().As<TService>().SingleInstance();
+
+            return builder;
         }
 
-        public static IServiceCollection AddMessageBus<TClient, TConfig>(this IServiceCollection services, Action<MessagingMiddlewareOptions> options = null)
+        public static ContainerBuilder AddMessageBus<TClient, TConfig>(this ContainerBuilder builder)
+           where TClient : class, IMessageQueueClient
+           where TConfig : class, IMessageQueueClientConfig
+        {
+            builder.Register(context =>
+            {
+                var config = Activator.CreateInstance<TConfig>();
+                config.Bind(context.Resolve<IConfiguration>());
+
+                var logger = context.Resolve<ILogger<TClient>>();
+                var client = (IMessageQueueClient)Activator.CreateInstance(typeof(TClient), new object[] { logger, config });
+
+                var mediator = context.Resolve<IMediator>();
+
+                return new MessageBus(client, mediator);
+            }).SingleInstance();
+
+            return builder;
+        }
+
+        public static ContainerBuilder AddEventBus<TClient, TConfig>(this ContainerBuilder builder)
             where TClient : class, IMessageQueueClient
             where TConfig : class, IMessageQueueClientConfig
         {
-            MessagingMiddlewareOptions middlewareOptions = new MessagingMiddlewareOptions();
-            options?.Invoke(middlewareOptions);
-
-            services.AddSingleton(serviceProvider =>
+            builder.Register<IEventBus>(context =>
             {
                 var config = Activator.CreateInstance<TConfig>();
-                config.Bind(serviceProvider.GetRequiredService<IConfiguration>());
+                config.Bind(context.Resolve<IConfiguration>());
 
-                var logger = serviceProvider.GetService<ILogger<TClient>>();
+                var logger = context.Resolve<ILogger<TClient>>();
                 var client = (IMessageQueueClient)Activator.CreateInstance(typeof(TClient), new object[] { logger, config });
 
-                var mediator = serviceProvider.GetRequiredService<IMediator>();
-                return new MessageBus(client, mediator, middlewareOptions);
-            });
-            return services;
-        }
+                var mediator = context.Resolve<IMediator>();
 
-        public static IServiceCollection AddEventBus<TClient, TConfig>(this IServiceCollection services)
-            where TClient : class, IMessageQueueClient
-            where TConfig : class, IMessageQueueClientConfig
-        {
-            services.AddSingleton<IEventBus>(serviceProvider =>
-            {
-                var config = Activator.CreateInstance<TConfig>();
-                config.Bind(serviceProvider.GetRequiredService<IConfiguration>());
-
-                var logger = serviceProvider.GetService<ILogger<TClient>>();
-                var client = (IMessageQueueClient)Activator.CreateInstance(typeof(TClient), new object[] { logger, config });
-
-                var mediator = serviceProvider.GetRequiredService<IMediator>();
                 return new EventBus(client, mediator);
-            });
-            return services;
+            }).SingleInstance();
+
+            return builder;
         }
 
-        public static IServiceCollection AddMessaging<TClient, TConfig>(this IServiceCollection services, Action<MessagingMiddlewareOptions> options = null)
+        public static ContainerBuilder AddMessaging<TClient, TConfig>(this ContainerBuilder builder)
             where TClient : class, IMessageQueueClient
             where TConfig : class, IMessageQueueClientConfig
         {
-            services.AddMessageBus<TClient, TConfig>(options);
-            services.AddEventBus<TClient, TConfig>();
-            return services;
+            builder.AddMediator();
+            builder.AddEventBus<TClient, TConfig>();
+            builder.AddMessageBus<TClient, TConfig>();
+
+            return builder;
         }
 
-        private static void RegisterType(this IServiceCollection services, Type targetType)
+        private static ContainerBuilder RegisterHandlers(this ContainerBuilder builder, Assembly[] assemblies = null)
         {
-            services.Scan(x => x.FromApplicationDependencies()
-                .AddClasses(s => s.AssignableTo(targetType).Where(f => !f.IsGenericType))
-                .AsImplementedInterfaces()
-                .WithTransientLifetime());
+           builder.RegisterAssemblyTypes(assemblies)
+               .AsClosedTypesOf(typeof(CommandHandler<>))
+               .AsSelf()
+               .InstancePerRequest();
+
+            builder.RegisterAssemblyTypes(assemblies)
+               .AsClosedTypesOf(typeof(QueryHandler<,>))
+               .AsSelf()
+               .InstancePerRequest();
+
+            builder.RegisterAssemblyTypes(assemblies)
+               .AsClosedTypesOf(typeof(Abstractions.EventHandler<>))
+               .AsSelf()
+               .InstancePerRequest();
+
+            builder.RegisterAssemblyTypes(assemblies)
+               .AsClosedTypesOf(typeof(MessageHandler<>))
+               .AsSelf()
+               .InstancePerRequest();
+
+            return builder;
+        }
+
+        private static ContainerBuilder RegisterPipelines(this ContainerBuilder builder, Assembly[] assemblies = null)
+        {
+            builder.RegisterAssemblyTypes(assemblies)
+               .AssignableTo(typeof(IPipelinePreProcessor))
+               .AsSelf()
+               .SingleInstance();
+
+            builder.RegisterAssemblyTypes(assemblies)
+              .AssignableTo(typeof(IPipelinePostProcessor))
+              .AsSelf()
+              .SingleInstance();
+
+            return builder;
         }
     }
 }

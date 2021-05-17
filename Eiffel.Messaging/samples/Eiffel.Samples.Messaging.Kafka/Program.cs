@@ -7,8 +7,9 @@ using System.IO;
 using System.Threading.Tasks;
 using Eiffel.Messaging;
 using Eiffel.Messaging.Kafka;
-using Eiffel.Messaging.Abstractions;
-using Eiffel.Samples.Messaging.Kafka.Middlewares;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Autofac.Builder;
 
 namespace Eiffel.Samples.Messaging.Kafka
 {
@@ -42,36 +43,32 @@ namespace Eiffel.Samples.Messaging.Kafka
                    cfg.AddConfiguration(config);
                })
                .UseWindowsService()
+               .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+               .ConfigureContainer<ContainerBuilder>(ConfigureContainer)
                .ConfigureLogging((context, builder) =>
                {
                    builder.AddSimpleConsole(options =>
                    {
                        options.ColorBehavior = Microsoft.Extensions.Logging.Console.LoggerColorBehavior.Enabled;
                    });
-               })
-               .ConfigureServices(ConfigureServices);
+               });
             return hostBuilder;
         }
 
-        private static void ConfigureServices(HostBuilderContext builderContext, IServiceCollection services)
+        private static void ConfigureContainer(HostBuilderContext builderContext, ContainerBuilder builder)
         {
-            services.AddMediator();
+            // Mediator
+            builder.AddMediator();
 
             // NOTE: You can only use one of the two options 
             // You can specify different brokers for Events and Messages
-            services.AddEventBus<KafkaClient, KafkaClientConfig>();
-            services.AddMessageBus<KafkaClient, KafkaClientConfig>(options =>
-            {
-                options.AddMiddleware<IMessagingMiddleware, ValidationMiddleware>();
-            });
+            // services.AddEventBus<KafkaClient, KafkaClientConfig>();
+            // services.AddMessageBus<KafkaClient, KafkaClientConfig>();
 
-            // Also you can use same broker in both
-            services.AddMessaging<KafkaClient, KafkaClientConfig>(options =>
-            {
-                options.AddMiddleware<IMessagingMiddleware, ValidationMiddleware>();
-            });
+            // EventBus, MessageBus
+            builder.AddMessaging<KafkaClient, KafkaClientConfig>();
 
-            services.AddHostedService<WorkerService>();
+            builder.RegisterType<WorkerService>().As<IHostedService>().InstancePerDependency();
         }
     }
 }

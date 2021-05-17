@@ -1,20 +1,17 @@
 ﻿using Eiffel.Messaging.Abstractions;
-using Eiffel.Samples.Contracts;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Eiffel.Samples.Messaging.Kafka.Middlewares
+namespace Eiffel.Samples.Contracts.Pipelines
 {
-    public class ValidationMiddleware : IMessagingMiddleware
+    public class ValidationPipeline : IPipelinePreProcessor
     {
-        public Task InvokeAsync(object message, CancellationToken cancellationToken)
+        public Task ProcessAsync<TMessage>(TMessage message, CancellationToken cancellationToken = default)
         {
             if (message is IValidatable msg)
             {
                 msg.Validate();
             }
-
-            // TODO: Validate message
             return Task.CompletedTask;
         }
     }

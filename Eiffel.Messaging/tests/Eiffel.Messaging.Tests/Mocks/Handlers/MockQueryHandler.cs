@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Eiffel.Messaging.Tests.Mocks.Handlers
 {
-    public class MockQueryHandler : IQueryHandler<MockQuery, MockQueryResult>
+    public class MockQueryHandler : QueryHandler<MockQuery, MockQueryResult>
     {
-        public virtual Task<MockQueryResult> HandleAsync(MockQuery query, CancellationToken cancellationToken)
+        public override Task<MockQueryResult> HandleAsync(MockQuery query, CancellationToken cancellationToken = default)
         {
             var result = new MockQueryResult();
             result.Items.AddRange(new object[] { new(), new(), new() });

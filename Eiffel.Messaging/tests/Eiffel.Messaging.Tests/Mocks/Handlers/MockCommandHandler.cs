@@ -5,20 +5,19 @@ using System.Threading.Tasks;
 
 namespace Eiffel.Messaging.Tests.Mocks.Handlers
 {
-    public class MockCommandHandler : ICommandHandler<MockCommand>, ICommandHandler<MockInvalidCommand>
+    public class MockCommandHandler : CommandHandler<MockCommand>
     {
-        public virtual Task HandleAsync(MockCommand command, CancellationToken cancellationToken)
+        public override Task<string> HandleAsync(MockCommand command, CancellationToken cancellationToken = default)
         {
-            return Task.CompletedTask;
+            return Task.FromResult(string.Empty);
         }
+    }
 
-        public virtual Task HandleAsync(MockInvalidCommand command, CancellationToken cancellationToken)
+    public class MockInvalidCommandHandler : CommandHandler<MockInvalidCommand>
+    {
+        public override Task<string> HandleAsync(MockInvalidCommand command, CancellationToken cancellationToken = default)
         {
-            if (command is IValidatable cmd)
-            {
-                cmd.Validate();
-            }
-            return Task.CompletedTask;
+            throw new System.NotImplementedException();
         }
     }
 }

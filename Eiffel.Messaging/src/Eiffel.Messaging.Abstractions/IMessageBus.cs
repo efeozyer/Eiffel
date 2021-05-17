@@ -12,10 +12,10 @@ namespace Eiffel.Messaging.Abstractions
             where TMessage : class, new();
 
         void Subscribe<TMessage>()
-            where TMessage : class, IMessage, new();
+            where TMessage : Message, new();
 
         Task SubscribeAsync<TMessage>(CancellationToken cancellationToken = default)
-            where TMessage : class, IMessage, new();
+            where TMessage : Message, new();
 
         void Unsubscribe();
     }

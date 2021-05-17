@@ -1,6 +1,7 @@
 ﻿namespace Eiffel.Messaging.Abstractions
 {
-    public interface IEvent : IMessage
+    public abstract class Event
     {
+
     }
 }
