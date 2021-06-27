@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Eiffel.Persistence.Abstractions;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace Eiffel.Persistence.Tenancy
 {
@@ -11,7 +10,7 @@ namespace Eiffel.Persistence.Tenancy
             where TContext : DbContext
             where TStrategy : class, ITenancyStrategy<TContext>
         {
-           return builder;
+            return builder;
         }
     }
 }
