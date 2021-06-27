@@ -1,16 +1,17 @@
 ﻿using Autofac;
 using Eiffel.Persistence.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Eiffel.Persistence.Tenancy
 {
     public static class ContainerBuilderextensions
     {
-        public static ContainerBuilder AddTenancy<TContext, TStrategy>(this ContainerBuilder services, TStrategy tenancyStrategy)
+        public static ContainerBuilder AddTenancy<TContext, TStrategy>(this ContainerBuilder builder, DbContextOptions<TenancyDbContext> options)
             where TContext : DbContext
             where TStrategy : class, ITenancyStrategy<TContext>
         {
-            return services;
+           return builder;
         }
     }
 }
