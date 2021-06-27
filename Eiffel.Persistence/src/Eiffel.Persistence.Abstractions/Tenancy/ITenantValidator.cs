@@ -2,10 +2,9 @@
 
 namespace Eiffel.Persistence.Abstractions
 {
-    public interface ITenantIdentificationStrategy<TKey>
+    public interface ITenantValidator<TKey>
         where TKey : IEquatable<TKey>
     {
-        string Name { get; }
-        TKey Identify();
+        void Validate(TKey key);
     }
 }

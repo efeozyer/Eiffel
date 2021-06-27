@@ -9,7 +9,13 @@ namespace Eiffel.Persistence.Tenancy
 
         public TenancyDbContext(DbContextOptions<TenancyDbContext> options) : base(options)
         {
+            
+        }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new TenantEntityConfiguration());
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
