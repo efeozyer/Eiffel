@@ -7,6 +7,7 @@ namespace Eiffel.Persistence.Tenancy
     {
         public virtual DbSet<TenantEntity> Tenants { get; set; }
 
+
         public TenancyDbContext(DbContextOptions<TenancyDbContext> options) : base(options)
         {
             

@@ -22,19 +22,17 @@ namespace Eiffel.Persistence.Tenancy
 
         public virtual void Execute()
         {
-            var tenants = _dbContext.Tenants
-                .ToList();
+            var tenants = _dbContext.Tenants.ToList();
 
             foreach (var tenant in tenants)
             {
                 var optionsBuilder = new DbContextOptionsBuilder<TContext>();
                 optionsBuilder.UseSqlServer(tenant.ConnectionString);
                 
-                var dbContext = (TContext)Activator.CreateInstance(typeof(TContext), new[] { optionsBuilder.Options });
-                
-                _containerBuilder.RegisterInstance(dbContext)
+                _containerBuilder.RegisterType<TContext>()
+                    .WithParameter("options", optionsBuilder.Options)
                     .Keyed<TContext>(tenant.Id)
-                    .InstancePerRequest();
+                    .InstancePerLifetimeScope();
 
                 var tenantMetadata = new TenantMetadata
                 {

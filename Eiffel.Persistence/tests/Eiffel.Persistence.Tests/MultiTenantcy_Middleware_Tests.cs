@@ -1,9 +1,7 @@
 ﻿using Autofac;
-using Autofac.Core;
 using Autofac.Extras.Moq;
 using Eiffel.Persistence.Abstractions;
 using Eiffel.Persistence.Tenancy;
-using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Moq;
