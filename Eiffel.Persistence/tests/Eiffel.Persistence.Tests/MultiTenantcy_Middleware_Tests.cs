@@ -22,8 +22,6 @@ namespace Eiffel.Persistence.Tests
 
         private readonly MultiTenancyMiddleware _tenancyMiddleware;
 
-        private readonly IContainer container;
-
         public MultiTenantcy_Middleware_Tests()
         {
             _mockTenancyDbContext = new Mock<TenancyDbContext>(new DbContextOptions<TenancyDbContext>());
@@ -34,8 +32,6 @@ namespace Eiffel.Persistence.Tests
             var mock = AutoMock.GetLoose(x => x.RegisterMock(_mockTenancyDbContext));
             _tenancyMiddleware = new MultiTenancyMiddleware(_mockRequestDeletegate.Object, _mockIdentificationStrategy.Object, mock.Container.BeginLifetimeScope());
             
-            container = mock.Container;
-
             Init();
         }
 
