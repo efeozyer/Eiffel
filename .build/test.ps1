@@ -14,7 +14,7 @@ foreach ($rootDir in Get-ChildItem -Directory -Path . -Filter 'Eiffel.*')
     {
         Write-Host $rootDir.FullName
         Write-Host "Tests runing $($rootDir.Name)"
-        dotnet test $rootDir.FullName
+        dotnet test $rootDir.FullName --no-build --no-restore
         if (-Not($?)) 
         {
             throw "Tests failed!"
