@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 
 namespace Eiffel.Domain
 {
+    // TODO: Improve this prototype
     public sealed class DomainEventStore
     {
         private static readonly object _lock = new();

@@ -10,7 +10,6 @@ namespace Eiffel.Domain.EventPublisher
     // TODO: Circuit breaker pattern
 
     // TODO: Optional persist event store state (Consider implementation place)
-
     public class DomainEventPublisher : IDomainEventPublisher
     {
         private readonly IEventBus _eventBus;
