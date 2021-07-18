@@ -91,22 +91,22 @@ namespace Eiffel.Messaging
            builder.RegisterAssemblyTypes(assemblies)
                .AsClosedTypesOf(typeof(CommandHandler<>))
                .AsSelf()
-               .InstancePerRequest();
+               .InstancePerLifetimeScope();
 
             builder.RegisterAssemblyTypes(assemblies)
                .AsClosedTypesOf(typeof(QueryHandler<,>))
                .AsSelf()
-               .InstancePerRequest();
+               .InstancePerLifetimeScope();
 
             builder.RegisterAssemblyTypes(assemblies)
                .AsClosedTypesOf(typeof(Abstractions.EventHandler<>))
                .AsSelf()
-               .InstancePerRequest();
+               .InstancePerLifetimeScope();
 
             builder.RegisterAssemblyTypes(assemblies)
                .AsClosedTypesOf(typeof(MessageHandler<>))
                .AsSelf()
-               .InstancePerRequest();
+               .InstancePerLifetimeScope();
 
             return builder;
         }

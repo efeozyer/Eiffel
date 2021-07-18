@@ -64,6 +64,7 @@ namespace Eiffel.Messaging
         private TResult DispatchAsync<TMessage, TResult>(TMessage message, Type handlerType, CancellationToken cancellationToken)
         {
             var handler = _lifetimeScope.ResolveOptional(handlerType);
+
             if (handler == null)
                 throw new HandlerCouldNotBeResolvedException($"{message.GetType().Name} handler could not be resolved");
 
@@ -71,6 +72,7 @@ namespace Eiffel.Messaging
                 throw new OperationCanceledException();
 
             var handleMethod = handler.GetType().GetMethod("HandleAsync");
+
             if (handleMethod == null)
                 throw new MissingMethodException("HandleAsync method is missing!");
 

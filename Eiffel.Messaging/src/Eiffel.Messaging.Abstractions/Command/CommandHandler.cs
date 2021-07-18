@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 
 namespace Eiffel.Messaging.Abstractions
 {
-    public abstract class CommandHandler<TCommand>
-        where TCommand : Command
+    public abstract class CommandHandler<TPayload>
+        where TPayload : Command
     {
-        public abstract Task<string> HandleAsync(TCommand command, CancellationToken cancellationToken = default);
+        public abstract Task HandleAsync(TPayload payload, CancellationToken cancellationToken = default);
     }
 }
 

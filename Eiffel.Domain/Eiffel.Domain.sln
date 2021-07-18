@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31129.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eiffel.Domain.Abstractions", "src\Eiffel.Domain.Abstractions\Eiffel.Domain.Abstractions.csproj", "{9F7A8215-0215-46D0-B9FA-43AC0A1789EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eiffel.Domain", "src\Eiffel.Domain\Eiffel.Domain.csproj", "{071FFC93-1829-4E46-893E-6FB50A4C2DFB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9F7A8215-0215-46D0-B9FA-43AC0A1789EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F7A8215-0215-46D0-B9FA-43AC0A1789EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F7A8215-0215-46D0-B9FA-43AC0A1789EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F7A8215-0215-46D0-B9FA-43AC0A1789EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{071FFC93-1829-4E46-893E-6FB50A4C2DFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{071FFC93-1829-4E46-893E-6FB50A4C2DFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{071FFC93-1829-4E46-893E-6FB50A4C2DFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{071FFC93-1829-4E46-893E-6FB50A4C2DFB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {27A68ABB-CB31-4423-8C2D-F15B58DAA2B0}
+	EndGlobalSection
+EndGlobal

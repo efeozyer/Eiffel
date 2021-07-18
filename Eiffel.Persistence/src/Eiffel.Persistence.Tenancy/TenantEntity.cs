@@ -1,4 +1,4 @@
-﻿using Eiffel.Persistence.Abstractions.Entity;
+﻿using Eiffel.Persistence.Abstractions;
 using System;
 
 namespace Eiffel.Persistence.Tenancy

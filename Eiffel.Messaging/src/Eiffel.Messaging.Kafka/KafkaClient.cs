@@ -20,10 +20,13 @@ namespace Eiffel.Messaging.Kafka
         public KafkaClient(ILogger<KafkaClient> logger, KafkaClientConfig config)
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
+
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             _producer = new ProducerBuilder<Null, byte[]>(config.ProducerConfig).Build();
+
             _consumer = new ConsumerBuilder<Null, byte[]>(config.ConsumerConfig).Build();
+
             _tokenSource = new CancellationTokenSource();
         }
 
@@ -33,6 +36,7 @@ namespace Eiffel.Messaging.Kafka
             await Task.Factory.StartNew(() =>
             {
                 _consumer.Subscribe(topicName);
+
                 while (true)
                 {
                     if (_tokenSource.IsCancellationRequested)
