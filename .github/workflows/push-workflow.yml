@@ -45,6 +45,6 @@ jobs:
       shell: powershell
       
     - name: Publish
-      run: .\.build\p.ps1 -apiKey ${{ secrets.NUGET_API_KEY }} -source ${{ secrets.NUGET_SOURCE_ADDR }}
+      run: .\.build\publish.ps1 -apiKey ${{ secrets.NUGET_API_KEY }} -source ${{ secrets.NUGET_SOURCE_ADDR }}
       shell: powershell
     
