@@ -1,18 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
-	</PropertyGroup>
-	
-	<ItemGroup>
-		<PackageReference Include="Autofac" Version="6.1.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.6" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
-		<PackageReference Include="Scrutor" Version="3.3.0" />
-	</ItemGroup>
-	
-	<ItemGroup>
-		<ProjectReference Include="..\Eiffel.Messaging.Abstractions\Eiffel.Messaging.Abstractions.csproj" />
-		<ProjectReference Include="..\Eiffel.Messaging.Extensions\Eiffel.Messaging.Extensions.csproj" />
-	</ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Version>0.0.1.1</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Scrutor" Version="3.3.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Eiffel.Messaging.Abstractions\Eiffel.Messaging.Abstractions.csproj" />
+    <ProjectReference Include="..\Eiffel.Messaging.Extensions\Eiffel.Messaging.Extensions.csproj" />
+  </ItemGroup>
 </Project>
