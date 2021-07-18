@@ -22,7 +22,7 @@ foreach ($rootDir in Get-ChildItem -Directory -Path . -Filter 'Eiffel.*')
             $currentVersion = [version] $csprojXml.Project.PropertyGroup.Version
             if ([string]::IsNullOrWhiteSpace($csprojXml.Project.PropertyGroup.Version)) 
             {
-                $newVersion = [version]::new(0, 0, 1, 1);
+                $newVersion = [version]::new(1, 0, 0, 0);
                 $versionNode = $csprojXml.CreateElement("Version")
                 $versionNode.InnerText = $newVersion
                 $csprojXml.SelectSingleNode("//Project//PropertyGroup").AppendChild($versionNode) | Out-Null
@@ -40,7 +40,7 @@ foreach ($rootDir in Get-ChildItem -Directory -Path . -Filter 'Eiffel.*')
             }
             
             & git add .
-            & git commit -m "$($subDir.Name).v$($newVersion)" --no-verify
+            & git pre-commit -m "$($subDir.Name).v$($newVersion)" --no-verify
             
             if (-Not($?)) 
             {
