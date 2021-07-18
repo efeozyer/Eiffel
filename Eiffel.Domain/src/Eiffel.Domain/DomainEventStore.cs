@@ -51,7 +51,7 @@ namespace Eiffel.Domain
             action.Invoke(@event);
         }
 
-        public void Remove(object @event)
+        public void Commit()
         {
             _domainEvents.TryPop(out _);
         }

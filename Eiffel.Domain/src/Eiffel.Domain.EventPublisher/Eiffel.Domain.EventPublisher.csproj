@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Eiffel.Messaging.Abstractions" Version="0.0.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Eiffel.Domain.Abstractions\Eiffel.Domain.Abstractions.csproj" />
+    <ProjectReference Include="..\Eiffel.Domain\Eiffel.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
