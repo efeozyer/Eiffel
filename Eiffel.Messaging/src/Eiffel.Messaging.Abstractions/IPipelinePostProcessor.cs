@@ -7,4 +7,4 @@ namespace Eiffel.Messaging.Abstractions
     {
         Task ProcessAsync<TMessage>(TMessage message, CancellationToken cancellationToken = default);
     }
-}
+} 
