@@ -74,7 +74,7 @@ namespace Eiffel.Messaging
             var handleMethod = handler.GetType().GetMethod("HandleAsync");
 
             if (handleMethod == null)
-                throw new MissingMethodException("HandleAsync method is missing!");
+                throw new MissingMethodException("HandleAsync");
 
             var preProcessors = _lifetimeScope.ResolveOptional<IEnumerable<IPipelinePreProcessor>>()?.ToList();
             foreach(var processor in preProcessors ?? Enumerable.Empty<IPipelinePreProcessor>())
