@@ -2,8 +2,11 @@ name: Eiffel.Framework.OnPush
 
 on:
   push:
-    branches: [ main ]
-    
+    branches: 
+      - main
+    tags-ignore:
+      - v*
+
 jobs:
   build:
     runs-on: windows-latest
