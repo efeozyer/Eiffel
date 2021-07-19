@@ -45,7 +45,7 @@ foreach ($rootDir in Get-ChildItem -Directory -Path . -Filter 'Eiffel.*')
 
             & git tag -a  "$($subDir.Name).v$($newVersion)" -m "New release for $($subDir.Name)"
 
-            & git push --tags
+            & git push origin --tags
             
             if (-Not($?)) 
             {

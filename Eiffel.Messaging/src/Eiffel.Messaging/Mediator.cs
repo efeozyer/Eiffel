@@ -66,7 +66,7 @@ namespace Eiffel.Messaging
             var handler = _lifetimeScope.ResolveOptional(handlerType);
 
             if (handler == null)
-                throw new HandlerCouldNotBeResolvedException($"{message.GetType().Name} handler could not be resolved.");
+                throw new HandlerCouldNotBeResolvedException($"{message.GetType().Name} handler could not be resolved. ");
 
             if (cancellationToken.IsCancellationRequested)
                 throw new OperationCanceledException();
