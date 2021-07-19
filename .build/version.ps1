@@ -40,7 +40,10 @@ foreach ($rootDir in Get-ChildItem -Directory -Path . -Filter 'Eiffel.*')
             }
             
             & git add .
-            & git pre-commit -m "$($subDir.Name).v$($newVersion)" --no-verify
+            
+            & git commit
+
+            & git tag -a "v$($subDir.Name).v$($newVersion)" -m 
             
             if (-Not($?)) 
             {
