@@ -41,9 +41,9 @@ foreach ($rootDir in Get-ChildItem -Directory -Path . -Filter 'Eiffel.*')
             
             & git add .
             
-            & git commit
+            & git commit -m "Package version upgraded"
 
-            & git tag -a "v$($subDir.Name).v$($newVersion)" -m 
+            & git tag -a "v$($subDir.Name).v$($newVersion)"
             
             if (-Not($?)) 
             {
